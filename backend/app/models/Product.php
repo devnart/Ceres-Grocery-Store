@@ -1,0 +1,148 @@
+<?php
+class Product
+{
+    private $db;
+
+    public function __construct()
+    {
+        $this->db = new Database;
+    }
+
+
+    public function getSingle($id)
+    {
+
+        $this->db->query('SELECT * FROM product WHERE id=:id');
+
+        $this->db->bind(':id', $id);
+
+        $products = $this->db->single();
+        return $products;
+    }
+
+    public function getAll()
+    {
+
+        $this->db->query('SELECT * FROM product');
+        $products = $this->db->resultSet();
+        return $products;
+    }
+
+    public function addProduct($data)
+    {
+
+        $this->db->query('INSERT INTO product (name, description,img, category, price, unit) VALUES(:name, :description, :img, :category, :price, :unit)');
+
+        $this->db->bind(':name', $data['name']);
+        $this->db->bind(':description', $data['description']);
+        $this->db->bind(':img', $data['img']);
+        $this->db->bind(':category', $data['category']);
+        $this->db->bind(':price', $data['price']);
+        $this->db->bind(':unit', $data['unit']);
+
+        //Execute function 
+        try {
+            $this->db->execute();
+        } catch (PDOException $e) {
+            return $e->getMessage();
+        }
+    }
+
+    public function updateProduct($data, $id)
+    {
+
+        $this->db->query("UPDATE product SET name=:name, description=:description, img=:img, category=:category, price=:price, unit=:unit WHERE id=:id");
+
+        $this->db->bind(':id', $id);
+        $this->db->bind(':name', $data['name']);
+        $this->db->bind(':description', $data['description']);
+        $this->db->bind(':img', $data['img']);
+        $this->db->bind(':category', $data['category']);
+        $this->db->bind(':price', $data['price']);
+        $this->db->bind(':unit', $data['unit']);
+
+        //Execute function
+        try {
+            $this->db->execute();
+        } catch (PDOException $e) {
+            return $e->getMessage();
+        }
+    }
+
+    public function deleteProduct($id)
+    {
+        $this->db->query("DELETE FROM product WHERE id=:id");
+
+        $this->db->bind(':id', $id);
+
+        //Execute function
+        try {
+            $this->db->execute();
+            return "ok";
+        } catch (PDOException $e) {
+            return $e->getMessage();
+        }
+    }
+
+    public function checkout($data)
+    {
+
+        $this->db->query('INSERT INTO orders (clientId, products, first_name,last_name, phone, adress,totalPrice) VALUES(:clientId, :products, :first_name, :last_name, :phone, :adress, :totalPrice)');
+
+        $this->db->bind(':clientId', $data['clientId']);
+        $this->db->bind(':products', $data['products']);
+        $this->db->bind(':first_name', $data['first_name']);
+        $this->db->bind(':last_name', $data['last_name']);
+        $this->db->bind(':phone', $data['phone']);
+        $this->db->bind(':adress', $data['adress']);
+        $this->db->bind(':totalPrice', $data['totalPrice']);
+
+        //Execute function
+
+        try {
+            $this->db->execute();
+        } catch (PDOException $e) {
+            return $e->getMessage();
+        }
+    }
+
+    public function revenueToday()
+    {
+
+        $this->db->query("SELECT SUM(totalPrice) AS 'revenue' FROM `orders` WHERE date(created)  = CURDATE() ");
+
+        //Execute function
+        $products = $this->db->single();
+        return $products;
+    }
+
+    public function revenueYesterday()
+    {
+
+        $this->db->query("SELECT SUM(totalPrice) AS 'revenue' FROM `orders` WHERE date(created)  = CURDATE() - 1 ");
+
+        //Execute function
+        $products = $this->db->single();
+        return $products;
+    }
+
+    public function thisMonthRevenue()
+    {
+
+        $this->db->query("SELECT SUM(totalPrice) AS 'revenue' FROM `orders` WHERE MONTH(created)  = MONTH(CURDATE())");
+
+        //Execute function
+        $products = $this->db->single();
+        return $products;
+    }
+
+    public function previousMonthRevenue()
+    {
+
+        $this->db->query("SELECT SUM(totalPrice) AS 'revenue' FROM `orders` WHERE MONTH(created)  = MONTH(CURDATE())-1");
+
+        //Execute function
+        $products = $this->db->single();
+        return $products;
+    }
+}

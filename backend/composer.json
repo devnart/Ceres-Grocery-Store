@@ -1,0 +1,12 @@
+{
+    "name": "adm/reservation",
+    "authors": [
+        {
+            "name": "rania lamtabti",
+            "email": "rania.lamtabti@gmail.com"
+        }
+    ],
+    "require": {
+        "firebase/php-jwt": "^5.3"
+    }
+}
