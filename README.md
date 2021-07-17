@@ -1,4 +1,4 @@
-# Projet-Fil-Rouge-Ceres
+# Projet Fil Rouge Ceres
 
 <!-- ABOUT THE PROJECT -->
 ## About The Project
@@ -7,12 +7,20 @@
 
 Technology used:
 
-    <li>VueJs</li>
-    <li>PHP (with MVC architecture)</li>
-    <li>MySql for handling the databse</li>
+* Figma for prototyping
+* HTML/SCSS/VueJs for the front-end
+* PHP (with MVC architecture) for the server side
+* MySql for handling the databse
 
 Progress so far:
 
-* Created 90% of the app backend
-* You shouldn't be doing the same tasks over and over like creating a README from scratch
-* You should element DRY principles to the rest of your life :smile:
+* Created 3 UML Diagrames (Class, Use Case, Activity) ``` 100% ```
+* Designed the UI of the app ``` 85% (still have to design the responsive pages and cart page)```
+* Created the backend of the app ``` 95% (still need to add some statistics functions)```
+* Developping the front-end of the app ``` 30% ```  -- WORKING ON IT NOW -- 
+
+## TODO
+
+- [ ] Finish the UI design
+- [ ] develope 'add to cart' button in the client-side
+- [ ] complete the checkout proccess ( transfer data from the shop page to the checkout page and post it to the database)
