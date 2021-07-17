@@ -7,15 +7,12 @@
 
 Technology used:
 
-* Front-end: 
     <li>VueJs</li>
-
-* Back-end: 
     <li>PHP (with MVC architecture)</li>
     <li>MySql for handling the databse</li>
 
 Progress so far:
 
-* Created 90% of the app backend using php and MySql for database connection
+* Created 90% of the app backend
 * You shouldn't be doing the same tasks over and over like creating a README from scratch
 * You should element DRY principles to the rest of your life :smile:
