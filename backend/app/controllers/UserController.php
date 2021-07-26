@@ -16,7 +16,11 @@ class UserController extends Controller
     public function register()
     {
 
-        $this->userModel->storeClient($this->data);
+        
+
+        if($this->userModel->storeClient($this->data)) {
+            print_r(json_encode("Registred Sucssefully"));
+        }
     }
 
     public function find()
@@ -107,6 +111,18 @@ class UserController extends Controller
         } else {
             print_r(json_encode($checkp . 'false'));
         }
+    }
+
+    public function checkEmail(){
+        $checkEmail = $this->userModel->checkEmail($this->data);
+
+        if($checkEmail >=1) {
+            print_r(json_encode(true));
+        }else {
+            print_r(json_encode(false));
+        }
+
+
     }
 
     public function delete($id)

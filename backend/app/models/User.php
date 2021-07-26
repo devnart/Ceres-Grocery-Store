@@ -10,10 +10,10 @@ class User
 
     public function find($data)
     {
-        $this->db->query("SELECT * FROM client WHERE name = :name AND password = :password");
+        $this->db->query("SELECT * FROM client WHERE email = :email AND password = :password");
 
         //Bind values
-        $this->db->bind(':name', $data['name']);
+        $this->db->bind(':email', $data['email']);
         $this->db->bind(':password', $data['password']);
 
         //Execute function
@@ -90,6 +90,17 @@ class User
         } catch (PDOException $e) {
             return $e->getMessage();
         }
+    }
+
+    public function checkEmail($data){
+
+        $this->db->query("SELECT * FROM client WHERE email=:email");
+
+        $this->db->bind(':email', $data['email']);
+
+        $this->db->execute();
+        return $this->db->rowCount();
+
     }
 
     public function deleteUser($id){

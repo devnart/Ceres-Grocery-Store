@@ -1,6 +1,6 @@
 .DS_Store
 backend/vendor
-frontend/node_modules
+/frontend/node_modules
 /dist
 
 

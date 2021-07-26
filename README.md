@@ -19,7 +19,7 @@ Progress so far:
 * Created the backend of the app ``` 95% (still need to add some statistics functions)```
 * Developping the front-end of the app ``` 30% ```  -- WORKING ON IT NOW -- 
 
-## TODO
+TODO
 
 - [ ] Finish the UI design
 - [ ] develope 'add to cart' button in the client-side
