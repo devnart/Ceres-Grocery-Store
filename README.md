@@ -17,7 +17,7 @@ Progress so far:
 * Created 3 UML Diagrames (Class, Use Case, Activity) ``` 100% ```
 * Designed the UI of the app ``` 85% (still have to design the responsive pages and cart page)```
 * Created the backend of the app ``` 95% (still need to add some statistics functions)```
-* Developping the front-end of the app ``` 30% ```  -- WORKING ON IT NOW -- 
+* Developping the front-end of the app ``` 50% ```  -- WORKING ON IT NOW -- 
 
 TODO
 
