@@ -20,6 +20,8 @@
         $this->currentController = ucwords($url[0]);
         // Unset 0 Index
         unset($url[0]);
+      } else {
+        die('Controller not found');
       }
       // Require the controller
       require_once '../app/controllers/'.$this->currentController.'.php';

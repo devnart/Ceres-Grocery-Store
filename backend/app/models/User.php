@@ -41,7 +41,24 @@ class User
         }
     }
 
-
+    // get user
+    public function getUser($id)
+    {
+        $this->db->query("SELECT * FROM client WHERE id = :id");
+        $this->db->bind(':id', $id);
+        $user = $this->db->single();
+        return $user;
+    }  
+    
+    // update avatar
+    public function updateAvatar($id, $avatar)
+    {
+        $this->db->query("UPDATE client SET avatar = :avatar WHERE id = :id");
+        $this->db->bind(':avatar', $avatar);
+        $this->db->bind(':id', $id);
+        $this->db->execute();
+    }
+    
     public function updateClientInfo($data,$id)
     {
 

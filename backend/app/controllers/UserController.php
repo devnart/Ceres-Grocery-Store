@@ -1,7 +1,7 @@
 <?php
 header('Access-Control-Allow-Origin: *');
 header('Content-Type: application/json');
-header('Access-Control-Allow-Methods: POST');
+header('Access-Control-Allow-Methods: POST,PUT');
 header('Access-Control-Allow-Headers: Access-Control-Allow-Headers,Content-Type,Access-Control-Allow-Methods, Authorization, X-Requested-With');
 
 class UserController extends Controller
@@ -16,9 +16,7 @@ class UserController extends Controller
     public function register()
     {
 
-        
-
-        if($this->userModel->storeClient($this->data)) {
+        if ($this->userModel->storeClient($this->data)) {
             print_r(json_encode("Registred Sucssefully"));
         }
     }
@@ -39,11 +37,36 @@ class UserController extends Controller
             print_r(json_encode("Incorrect Password or Name !"));
         }
     }
+    // check jwt token
+    public function checkToken(){
+        $token = $this->data['token'];
+
+        try {
+            if($this->verifyAuth($token)){
+                print_r(json_encode("valid"));
+            }
+            
+        } catch (\Throwable $th) {
+            //throw $th;
+            print_r(json_encode(array(
+                "error" => "unauthorized" . $th->getMessage(),
+            )));
+        }
+    }
+    // get user by id
+    public function getUser()
+    {
+        $id = $this->data['id'];
+        $user = $this->userModel->getUser($id);
+        if ($user) {
+            print_r(json_encode($user));
+        } else {
+            print_r(json_encode("User not found"));
+        }
+    }
 
     public function update($id)
     {
-
-
 
         $headers = apache_request_headers();
         $headers = isset($headers['Authorization']) ? explode(' ', $headers['Authorization']) : null;
@@ -52,7 +75,7 @@ class UserController extends Controller
                 $this->verifyAuth($headers[1]);
                 $update = $this->userModel->updateClientInfo($this->data, $id);
                 if ($update) {
-                    print_r('Success! ');
+                    print_r('success');
                 }
             } catch (Throwable $th) {
                 print_r(json_encode(array(
@@ -65,7 +88,37 @@ class UserController extends Controller
             )));
         }
     }
+    // update avatar
+    public function updateAvatar($id)
+    {
+        $headers = apache_request_headers();
+        $headers = isset($headers['Authorization']) ? explode(' ', $headers['Authorization']) : null;
+        if ($headers) {
+            try {
+                $this->verifyAuth($headers[1]);
+                $filename = $_FILES["uploadfile"]["name"];
+                $tempname = $_FILES["uploadfile"]["tmp_name"];
+                $folder = "./img/".$filename;
 
+                if (move_uploaded_file($tempname, $folder)) {
+                    $msg = "Image uploaded successfully";
+                } else {
+                    $msg = "Failed to upload image";
+                }
+
+                $this->userModel->updateAvatar($id, $filename);
+                print_r(json_encode($msg));
+            } catch (Throwable $th) {
+                print_r(json_encode(array(
+                    "unauthorized Token",
+                )));
+            }
+        } else {
+            print_r(json_encode(array(
+                "error" => "unauthorized2",
+            )));
+        }
+    }
     public function updatePassword($id)
     {
 
@@ -75,7 +128,7 @@ class UserController extends Controller
         if ($headers) {
             try {
 
-                // role management 
+                // role management
                 $verify = $this->verifyAuth($headers[1]);
                 $exploaded = get_object_vars($verify);
                 print_r($exploaded['admin']);
@@ -86,7 +139,7 @@ class UserController extends Controller
 
                     $updatePassword = $this->userModel->updateClientPassword($this->data, $id);
                     if ($updatePassword) {
-                        print_r('Password Updated Successfully ! ');
+                        print_r(json_encode('success'));
                     }
                 } else {
                     print_r(json_encode('The current password is incorrect. Please try again'));
@@ -113,16 +166,15 @@ class UserController extends Controller
         }
     }
 
-    public function checkEmail(){
+    public function checkEmail()
+    {
         $checkEmail = $this->userModel->checkEmail($this->data);
 
-        if($checkEmail >=1) {
+        if ($checkEmail >= 1) {
             print_r(json_encode(true));
-        }else {
+        } else {
             print_r(json_encode(false));
         }
-
-
     }
 
     public function delete($id)
