@@ -84,13 +84,9 @@
 
 <script>
 import Product from "@/components/Product.vue";
-import ButtonFilled from "@/components/ButtonFilled.vue";
 import Submit from "@/components/Submit.vue";
 
 import Popper from "vue3-popper";
-
-import { createToast } from "mosha-vue-toastify";
-import "mosha-vue-toastify/dist/style.css";
 
 import axios from "axios";
 
@@ -99,7 +95,7 @@ export default {
   components: {
     Submit,
     Product,
-    ButtonFilled,
+    
     Popper,
   },
   data() {
@@ -126,6 +122,7 @@ export default {
       // delete from cart
       for (let i = 0; i < this.products.length; i++) {
         const element = this.products[i];
+        console.log(element.id)
         if (element.name == index) {
           this.products.splice(i, 1);
           localStorage.setItem("items", JSON.stringify(this.products));

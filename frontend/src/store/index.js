@@ -1,32 +1,61 @@
 import { createStore } from "vuex";
-import axios from "axios";
+import router from "../router";
 
+import axios from "axios";
+import createPersistedState from "vuex-persistedstate";
 import { createToast } from "mosha-vue-toastify";
 import "mosha-vue-toastify/dist/style.css";
 
-
 export default createStore({
+  plugins: [createPersistedState()],
   state: {
     products: [],
-    cart: [],
-    isAuth: localStorage.getItem('isAuth')
+    cart: JSON.parse(localStorage.getItem("items")) ?? [],
+    isAuth: JSON.parse(localStorage.getItem("isAuth")) ?? false,
+    user: {},
+    layout: 'simple-layout'
   },
   mutations: {
     SET_PRODUCTS(state, products) {
       state.products = products;
-
     },
     SET_CART(state, product) {
       state.cart.push(product);
-      localStorage.setItem("items", JSON.stringify(state.cart));
 
+      localStorage.setItem("items", JSON.stringify(state.cart));
     },
-    SET_AUTH(state,status){
-      state.isAuth = status
+    SET_AUTH(state, status) {
+      console.log(status);
+      state.isAuth = status;
       localStorage.setItem("isAuth", status);
+      console.log(state.isAuth);
+    },
+    SET_USER(state, user) {
+      state.user = user;
+    },
+    SET_LAYOUT (state, payload) {
+      state.layout = payload
     }
   },
   actions: {
+    checkJWT({ commit }) {
+      axios
+        .post("http://localhost/ceres/backend/UserController/checkToken", {
+          token: localStorage.getItem("token"),
+        })
+        .then((response) => {
+          if (response.data != "valid") {
+            localStorage.removeItem("isAuth");
+            commit("SET_AUTH", false);
+
+            router.push("/login");
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+
     // Get Products
 
     getProducts({ commit }) {
@@ -38,9 +67,7 @@ export default createStore({
     },
 
     addToCart({ commit }, payload) {
-      console.log(payload.product, payload.qty);
       if (payload.qty > 0) {
-
         createToast("Item added successfully", {
           showIcon: true,
           swipeClose: true,
@@ -62,9 +89,18 @@ export default createStore({
         });
       }
     },
-    login({ commit }, payload) {
-      commit("SET_AUTH", payload);
-    }
+    login({ commit }) {
+      commit("SET_AUTH", true);
+    },
+    logout({ commit }) {
+      localStorage.removeItem("isAuth");
+      commit("SET_AUTH", false);
+    },
   },
   modules: {},
+  getters: {
+    layout (state) {
+      return state.layout
+    }
+  }
 });

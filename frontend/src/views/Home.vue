@@ -50,6 +50,8 @@
 import ButtonFilled from "@/components/ButtonFilled.vue";
 import Product from "@/components/Product.vue";
 
+
+
 export default {
   name: "Home",
   
@@ -63,7 +65,6 @@ export default {
   methods: {},
   mounted() {
     this.$store.dispatch("getProducts");
-    console.log(this.$store.state.isAuth);
   },
   computed: {},
 };

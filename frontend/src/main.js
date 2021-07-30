@@ -6,6 +6,5 @@ import store from './store'
 
 const app = createApp(App);
 
-app.config.globalProperties.isAuthenticated = false;
 app.use(router).use(store).mount('#app')
 

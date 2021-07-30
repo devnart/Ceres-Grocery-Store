@@ -137,8 +137,8 @@ export default {
 
         localStorage.setItem("user_id", this.user_id);
         localStorage.setItem("token", this.store);
-
-        this.$store.dispatch("login", true);
+      this.$store.state.user = jwt.User;
+        this.$store.dispatch("login");
 
         createToast("Login successfully", {
           showIcon: true,
@@ -161,7 +161,7 @@ export default {
         });
       }
     },
-
+    
     register() {
       console.log(this.checkEmail);
       if (!this.checkEmail()) {
