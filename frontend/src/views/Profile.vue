@@ -142,8 +142,7 @@
                       :class="{
                         delivered: order.status == 'delivered',
                         pending: order.status == 'pending',
-                        cancelled: order.status == 'rejected',
-                        cancelled: order.status == 'cancelled',
+                        cancelled: order.status == 'rejected' || order.status == 'cancelled',
                       }"
                       >{{ order.status }}</span
                     >
@@ -380,7 +379,7 @@ export default {
 };
 </script>
 
-<style lang='scss' scoped>
+<style lang='scss'>
 $red: #fc573b;
 $yellow: #ffb848;
 $primary: #3ed749;
@@ -527,6 +526,16 @@ header {
   .order-adress {
     flex: 3;
   }
+
+  .delete-order {
+    display: flex;
+    justify-content: center;
+    img {
+      width: 32px;
+      height: 32px;
+    }
+  }
+}
   .status {
     display: flex;
     align-items: center;
@@ -542,13 +551,4 @@ header {
       border-radius: 50px;
     }
   }
-  .delete-order {
-    display: flex;
-    justify-content: center;
-    img {
-      width: 32px;
-      height: 32px;
-    }
-  }
-}
 </style>

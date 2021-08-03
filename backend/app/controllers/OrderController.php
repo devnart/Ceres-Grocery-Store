@@ -27,8 +27,43 @@ class OrderController extends Controller
     {
         $orderId = $this->data['orderId'];
         $status = $this->orderModel->cancelOrder($orderId);
-        print_r(json_encode($status));
     }
+
+    // accept order
+    public function acceptOrder()
+    {
+        $orderId = $this->data['orderId'];
+        $status = $this->orderModel->acceptOrder($orderId);
+    }
+
+    // reject order
+    public function rejectOrder()
+    {
+        $orderId = $this->data['orderId'];
+        $status = $this->orderModel->rejectOrder($orderId);
+    }
+
+    // pendding order
+    public function pendingOrder()
+    {
+        $orderId = $this->data['orderId'];
+        $status = $this->orderModel->pendingOrder($orderId);
+    }
+
+    // last orders
+    public function getLastOrders()
+    {
+        $orders = $this->orderModel->getLastOrders();
+        print_r(json_encode($orders));
+    }
+
+    // get order by id
+    public function getOrderById($id)
+    {
+        $order = $this->orderModel->getOrderById($id);
+        print_r(json_encode($order));
+    }
+
 
 
 }

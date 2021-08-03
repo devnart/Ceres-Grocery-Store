@@ -41,6 +41,22 @@ class User
         }
     }
 
+    // get all clients
+    public function getAllClients()
+    {
+        $this->db->query('SELECT * FROM client');
+        $clients = $this->db->resultSet();
+        return $clients;
+    }
+
+    // get last 4 clients
+    public function getLast4Clients()
+    {
+        $this->db->query('SELECT * FROM client ORDER BY id DESC LIMIT 4');
+        $clients = $this->db->resultSet();
+        return $clients;
+    }
+
     // get user
     public function getUser($id)
     {

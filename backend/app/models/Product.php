@@ -116,11 +116,22 @@ class Product
         return $products;
     }
 
-    public function revenueYesterday()
+    public function revenueYesterday($yesterday)
     {
 
-        $this->db->query("SELECT SUM(totalPrice) AS 'revenue' FROM `orders` WHERE date(created)  = CURDATE() - 1 ");
+        $this->db->query("SELECT SUM(totalPrice) AS 'revenue' FROM `orders` WHERE date(created)  =:yesterday ");
+        
+        $this->db->bind(':yesterday', $yesterday);
+        //Execute function
+        $products = $this->db->single();
+        return $products;
+    }
 
+    // get this week's revenue
+    public function revenueThisWeek($thisweek)
+    {
+        $this->db->query("SELECT SUM(totalPrice) AS 'revenue' FROM `orders` WHERE date(created)  BETWEEN :thisweek AND DATE_ADD(:thisweek, INTERVAL 7 DAY) ");
+        $this->db->bind(':thisweek', $thisweek);
         //Execute function
         $products = $this->db->single();
         return $products;

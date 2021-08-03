@@ -14,21 +14,21 @@ class ProductController extends Controller
     }
 
     // get single product by ID
-    public function getSingle($id){
+    public function getSingle($id)
+    {
         $product = $this->productModel->getSingle($id);
         print_r(json_encode($product));
     }
 
     // get all products
-    public function getProducts(){
+    public function getProducts()
+    {
         $products = $this->productModel->getAll();
 
         foreach ($products as $product) {
             $product->qty = 1;
-
         }
         print_r(json_encode($products));
-
     }
 
     // Add Product 
@@ -67,7 +67,8 @@ class ProductController extends Controller
     }
 
     // update product
-    public function updateProduct($id){
+    public function updateProduct($id)
+    {
 
         $headers = apache_request_headers();
         $headers = isset($headers['Authorization']) ? explode(' ', $headers['Authorization']) : null;
@@ -80,8 +81,8 @@ class ProductController extends Controller
                 if ($exploaded['admin']) {
 
                     // *** The Important Stuff *** //
-                    
-                    $this->productModel->updateProduct($this->data,$id);
+
+                    $this->productModel->updateProduct($this->data, $id);
                     print_r(json_encode('Product Updated Successfully'));
                 } else {
                     print_r(json_encode(array(
@@ -98,10 +99,10 @@ class ProductController extends Controller
                 "error" => "unauthorized2",
             )));
         }
-
     }
 
-    public function deleteProduct($id){
+    public function deleteProduct($id)
+    {
 
 
         $headers = apache_request_headers();
@@ -115,7 +116,7 @@ class ProductController extends Controller
                 if ($exploaded['admin']) {
 
                     // *** The Important Stuff *** //
-                    
+
                     $this->productModel->deleteProduct($id);
                     print_r(json_encode('Product Deleted Successfully'));
                 } else {
@@ -135,8 +136,9 @@ class ProductController extends Controller
         }
     }
 
-    public function checkout(){
-        
+    public function checkout()
+    {
+
         $headers = apache_request_headers();
         $headers = isset($headers['Authorization']) ? explode(' ', $headers['Authorization']) : null;
         if ($headers) {
@@ -146,7 +148,6 @@ class ProductController extends Controller
                 $this->verifyAuth($headers[1]);
                 $this->productModel->checkout($this->data);
                 print_r(json_encode(true));
-
             } catch (Throwable $th) {
                 print_r(json_encode(array(
                     "error" => "unauthorized1",
@@ -157,49 +158,71 @@ class ProductController extends Controller
                 "error" => "unauthorized2",
             )));
         }
-
     }
 
+    public function revenues()
+    {
+        // create object
+        $revenue = new stdClass();
+        $revenue->today = $this->revenueToday();
+        $revenue->yesterday = $this->revenueYesterday();
+        $revenue->thisWeek = $this->revenueThisWeek();
+        $revenue->thisMonth = $this->thisMonthRevenue();
 
+       print_r(json_encode($revenue) );
+    }
     // Calculate Earning (Today)
-    public function revenueToday(){
+    public function revenueToday()
+    {
 
         $r = $this->productModel->revenueToday();
-        print_r(json_encode($r));
+        return $r->revenue;
+        // print_r();
 
         // Calculate the Difference
-        $new = $r->revenue;
-        $old = $this->revenueYesterday();
+        // $new = $r->revenue;
+        // $old = $this->revenueYesterday();
 
-        $diff = $new - $old;
-        $diff = $diff / $old * 100;
-        $diff = round($diff, 2);
-        print_r('the diff : ' . $diff);
-
-
+        // $diff = $new - $old;
+        // $diff = $diff / $old * 100;
+        // $diff = round($diff, 2);
+        // print_r(json_encode('the diff : ' . $diff));
     }
 
     // Calculate Earning (Yesterday)
-    public function revenueYesterday(){
+    public function revenueYesterday()
+    {
+        $yesterday = date('Y-m-d', strtotime('-1 day'));
+        $r = $this->productModel->revenueYesterday($yesterday);
+        return $r->revenue;
 
-        $r = $this->productModel->revenueYesterday();
+        // return print_r($r->revenue);
+    }
+    // get this week's revenue
+    public function revenueThisWeek()
+    {
+        $thisWeek = date('Y-m-d', strtotime('-7 day'));
+        $r = $this->productModel->revenueThisWeek($thisWeek);
+        // return print_r($r->revenue);
         return $r->revenue;
 
     }
 
     // Calculate Earning (This Month)
-    public function thisMonthRevenue(){
+    public function thisMonthRevenue()
+    {
 
         $r = $this->productModel->thisMonthRevenue();
-        print_r($r->revenue);
+        // print_r($r->revenue);
+        return $r->revenue;
 
     }
 
     // Calculate Earning (Previous Month)
-    public function previousMonthRevenue(){
+    public function previousMonthRevenue()
+    {
 
         $r = $this->productModel->previousMonthRevenue();
         print_r($r->revenue);
-
     }
 }

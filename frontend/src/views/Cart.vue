@@ -65,7 +65,7 @@
                 </p>
               </div>
               <Popper arrow hover content="Delete from cart?">
-                <i @click="deleteItem(product.name)" class="fas fa-times"></i>
+                <i @click="$store.commit('REMOVE_CART', product)" class="fas fa-times"></i>
               </Popper>
             </div>
             <div class="total">
@@ -100,7 +100,7 @@ export default {
   },
   data() {
     return {
-      products: JSON.parse(localStorage.getItem("items")),
+      products: this.$store.state.cart,
       total: 0,
       finalProducts: [],
       firstName: "",
@@ -115,19 +115,6 @@ export default {
         this.finalProducts += `${element.name}(${element.qty}) `;
       });
       console.log(this.finalProducts);
-    },
-
-    deleteItem: function (index) {
-
-      // delete from cart
-      for (let i = 0; i < this.products.length; i++) {
-        const element = this.products[i];
-        console.log(element.id)
-        if (element.name == index) {
-          this.products.splice(i, 1);
-          localStorage.setItem("items", JSON.stringify(this.products));
-        }
-      }
     },
 
     // Posting order details to database

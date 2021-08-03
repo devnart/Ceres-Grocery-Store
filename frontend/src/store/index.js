@@ -7,13 +7,24 @@ import { createToast } from "mosha-vue-toastify";
 import "mosha-vue-toastify/dist/style.css";
 
 export default createStore({
-  plugins: [createPersistedState()],
+  plugins: [createPersistedState({
+    reducer: (persistedState) => {
+      const stateFilter = Object.assign({}, persistedState)
+      const blackList = ['layout']
+
+      blackList.forEach((item) => {
+        delete stateFilter[item]
+      })
+
+      return stateFilter
+    }
+  })],
   state: {
     products: [],
-    cart: JSON.parse(localStorage.getItem("items")) ?? [],
+    cart: [],
     isAuth: JSON.parse(localStorage.getItem("isAuth")) ?? false,
     user: {},
-    layout: 'simple-layout'
+    layout: 'user-layout'
   },
   mutations: {
     SET_PRODUCTS(state, products) {
@@ -21,9 +32,12 @@ export default createStore({
     },
     SET_CART(state, product) {
       state.cart.push(product);
-
-      localStorage.setItem("items", JSON.stringify(state.cart));
     },
+    
+    REMOVE_CART(state, product) {
+      state.cart.splice(state.cart.indexOf(product), 1);
+    },
+
     SET_AUTH(state, status) {
       console.log(status);
       state.isAuth = status;

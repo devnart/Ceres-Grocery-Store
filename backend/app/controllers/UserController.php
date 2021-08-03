@@ -65,6 +65,29 @@ class UserController extends Controller
         }
     }
 
+    // get all clients
+    public function getAllClients()
+    {
+        $clients = $this->userModel->getAllClients();
+        if ($clients) {
+            print_r(json_encode($clients));
+        } else {
+            print_r(json_encode("No clients found"));
+        }
+    }
+
+    // get last 4 clients
+    public function getLast4Clients()
+    {
+        $clients = $this->userModel->getLast4Clients();
+        if ($clients) {
+            print_r(json_encode($clients));
+        } else {
+            print_r(json_encode("No clients found"));
+        }
+    }
+
+
     public function update($id)
     {
 
@@ -189,7 +212,7 @@ class UserController extends Controller
                 $exploaded = get_object_vars($verify);
 
                 if ($exploaded['admin']) {
-
+                    
                     // *** The Important Stuff *** //
 
                     $this->userModel->deleteUser($id);

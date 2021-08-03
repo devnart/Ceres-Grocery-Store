@@ -26,4 +26,52 @@ class Order
         $this->db->bind(':orderId', $orderId);
         $this->db->execute();
     }
+
+    // accept order
+    public function acceptOrder($orderId)
+    {
+        $this->db->query('UPDATE orders SET status=:status WHERE id=:orderId');
+        $this->db->bind(':status', 'delivered');
+        $this->db->bind(':orderId', $orderId);
+        $this->db->execute();
+    }
+
+    // reject order
+    public function rejectOrder($orderId)
+    {
+        $this->db->query('UPDATE orders SET status=:status WHERE id=:orderId');
+        $this->db->bind(':status', 'rejected');
+        $this->db->bind(':orderId', $orderId);
+        $this->db->execute();
+    }
+
+    // pending order
+    public function pendingOrder($orderId)
+    {
+        $this->db->query('UPDATE orders SET status=:status WHERE id=:orderId');
+        $this->db->bind(':status', 'pending');
+        $this->db->bind(':orderId', $orderId);
+        $this->db->execute();
+    }
+    
+
+    // last orders
+    public function getLastOrders()
+    {
+        $this->db->query('SELECT o.id,c.name,c.avatar,o.products,o.status,o.totalPrice  FROM client c ,orders o WHERE c.id=o.clientId
+        ORDER BY o.id DESC LIMIT 4');
+        $orders = $this->db->resultSet();
+        return $orders;
+    }
+
+    // get order by id
+    public function getOrderById($orderId)
+    {
+        $this->db->query('SELECT o.id,c.name,c.email,o.products,o.status,o.totalPrice,o.adress,o.phone,o.first_name,o.last_name  FROM client c ,orders o WHERE c.id=o.clientId AND o.id=:orderId ');
+
+        // $this->db->query('SELECT * FROM orders WHERE id=:orderId');
+        $this->db->bind(':orderId', $orderId);
+        $order = $this->db->single();
+        return $order;
+    }
 }
