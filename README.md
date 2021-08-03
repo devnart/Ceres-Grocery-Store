@@ -9,18 +9,21 @@ Technology used:
 
 * Figma for prototyping
 * HTML/SCSS/VueJs for the front-end
-* PHP (with MVC architecture) for the server side
+* PHP (with OOP/MVC architecture) for the server side
 * MySql for handling the databse
+* Notion for task management and notes
 
 Progress so far:
 
 * Created 3 UML Diagrames (Class, Use Case, Activity) ``` 100% ```
 * Designed the UI of the app ``` 85% (still have to design the responsive pages and cart page)```
 * Created the backend of the app ``` 95% (still need to add some statistics functions)```
-* Developping the front-end of the app ``` 50% ```  -- WORKING ON IT NOW -- 
+* Developping the front-end of the app ``` 60% ```  -- WORKING ON IT NOW -- 
 
 TODO
 
 - [ ] Finish the UI design
-- [ ] develope 'add to cart' button in the client-side
-- [ ] complete the checkout proccess ( transfer data from the shop page to the checkout page and post it to the database)
+- [ ] Add Users page (Back-office)
+- [ ] Add Orders page (Back-office)
+- [ ] Product form (Back-office)
+- [ ] JWT Authentification for the admin
