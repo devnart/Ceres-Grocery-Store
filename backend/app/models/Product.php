@@ -28,24 +28,24 @@ class Product
         return $products;
     }
 
-    public function addProduct($data)
+    public function addProduct($data,$avatar)
     {
 
         $this->db->query('INSERT INTO product (name, description,img, category, price, unit) VALUES(:name, :description, :img, :category, :price, :unit)');
 
         $this->db->bind(':name', $data['name']);
         $this->db->bind(':description', $data['description']);
-        $this->db->bind(':img', $data['img']);
+        $this->db->bind(':img', $avatar);
         $this->db->bind(':category', $data['category']);
         $this->db->bind(':price', $data['price']);
         $this->db->bind(':unit', $data['unit']);
 
         //Execute function 
-        try {
-            $this->db->execute();
-        } catch (PDOException $e) {
-            return $e->getMessage();
+        if(!$this->db->execute())
+        {
+            return false;
         }
+        return true;
     }
 
     public function updateProduct($data, $id)

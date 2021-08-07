@@ -35,35 +35,47 @@ class ProductController extends Controller
     public function addProduct()
     {
 
-        $headers = apache_request_headers();
-        $headers = isset($headers['Authorization']) ? explode(' ', $headers['Authorization']) : null;
-        if ($headers) {
-            try {
-                // role management ( so only the admin can add products)
-                $verify = $this->verifyAuth($headers[1]);
-                $exploaded = get_object_vars($verify);
+        // $headers = apache_request_headers();
+        // $headers = isset($headers['Authorization']) ? explode(' ', $headers['Authorization']) : null;
+        // if ($headers) {
+        // try {
+        // role management ( so only the admin can add products)
+        // $verify = $this->verifyAuth($headers[1]);
+        // $exploaded = get_object_vars($verify);
 
-                if ($exploaded['admin']) {
+        // if ($exploaded['admin']) {
 
-                    // *** The Important Stuff *** //
+        // *** The Important Stuff *** //
+        // show $_files content
+        $filename = $_FILES["img"]["name"];
+        $tempname = $_FILES["img"]["tmp_name"];
+        $folder = "./img/products/" . $filename;
 
-                    $this->productModel->addProduct($this->data);
-                    print_r(json_encode('Product Added Successfully'));
-                } else {
-                    print_r(json_encode(array(
-                        "error" => "401",
-                    )));
-                }
-            } catch (Throwable $th) {
-                print_r(json_encode(array(
-                    "error" => "unauthorized1",
-                )));
-            }
+        if (move_uploaded_file($tempname, $folder)) {
+            $msg = "Image uploaded successfully";
         } else {
-            print_r(json_encode(array(
-                "error" => "unauthorized2",
-            )));
+            $msg = "Failed to upload image";
         }
+        // $this->userModel->updateAvatar($id, $filename);
+        
+
+        $added = $this->productModel->addProduct($_REQUEST,$filename);
+        print_r(json_encode($added));
+        // } else {
+        //     print_r(json_encode(array(
+        //         "error" => "401",
+        //     )));
+        // }
+        // } catch (Throwable $th) {
+        //     print_r(json_encode(array(
+        //         "error" => "unauthorized1",
+        //     )));
+        // }
+        // } else {
+        //     print_r(json_encode(array(
+        //         "error" => "unauthorized2",
+        //     )));
+        // }
     }
 
     // update product
@@ -169,7 +181,7 @@ class ProductController extends Controller
         $revenue->thisWeek = $this->revenueThisWeek();
         $revenue->thisMonth = $this->thisMonthRevenue();
 
-       print_r(json_encode($revenue) );
+        print_r(json_encode($revenue));
     }
     // Calculate Earning (Today)
     public function revenueToday()
@@ -205,7 +217,6 @@ class ProductController extends Controller
         $r = $this->productModel->revenueThisWeek($thisWeek);
         // return print_r($r->revenue);
         return $r->revenue;
-
     }
 
     // Calculate Earning (This Month)
@@ -215,7 +226,6 @@ class ProductController extends Controller
         $r = $this->productModel->thisMonthRevenue();
         // print_r($r->revenue);
         return $r->revenue;
-
     }
 
     // Calculate Earning (Previous Month)

@@ -48,7 +48,7 @@
           <div class="products">
             <div class="product" v-for="product in products" :key="product.id">
               <div class="img-container">
-                <img src="@/assets/img/p1.jpg" alt="" />
+                <img :src="'http://localhost/ceres/backend/img/products/' + product.img" alt="" />
               </div>
               <div class="info">
                 <h2 class="product-title">{{ product.name }}</h2>
@@ -145,6 +145,9 @@ export default {
         )
         .then(function (response) {
           localStorage.removeItem('items')
+          // empty cart from store
+          self.$store.commit('CLEAR_CART');
+          // redirect to success page
           self.$router.push("/thanks");
         })
         .catch(function (error) {
@@ -188,21 +191,16 @@ $primary: #3ed749;
 }
 
 
-input:not(input[readonly]):not([type="submit"]) {
+select,input:not(input[readonly]):not([type="submit"]) {
   /* Colors / White */
   background: #ffffff;
   /* Shadow */
   box-shadow: 0px 4px 4px rgba(51, 51, 51, 0.04),
     0px 4px 4px rgba(51, 51, 51, 0.04);
   border-radius: 4px;
-
   border: none;
   padding: 15px 10px;
   font-size: 16px;
-  line-height: 24px;
-  /* identical to box height, or 150% */
-
-  /* Colors / Gray */
   color: rgba(17, 17, 17, 0.48);
 }
 i {

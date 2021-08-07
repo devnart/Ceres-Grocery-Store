@@ -36,6 +36,7 @@
           :title="item.name"
           :price="item.price"
           :value="item.qty"
+          :img="item.img"
           @decrease="item.qty--"
           @increase="item.qty++"
           @add="$store.dispatch('addToCart', { product: item, qty: item.qty })"

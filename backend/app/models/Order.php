@@ -54,6 +54,22 @@ class Order
         $this->db->execute();
     }
     
+    // get all orders ordered by date
+    public function getAllOrders($limit,$start)
+    {
+
+        // total rows
+        $this->db->query("SELECT COUNT(*) AS total FROM orders");
+        $total = $this->db->single();
+        $total = $total->total;
+
+        $this->db->query('SELECT * FROM orders  ORDER BY created DESC LIMIT :limit OFFSET :start' );
+        $this->db->bind(':limit', $limit);
+        $this->db->bind(':start', $start);
+        $orders = $this->db->resultSet();
+        return array($orders, $total);
+
+    }
 
     // last orders
     public function getLastOrders()

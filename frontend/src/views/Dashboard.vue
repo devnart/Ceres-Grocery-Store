@@ -11,7 +11,9 @@
                 <h3>Today</h3>
               </div>
               <div class="revenue-detail-value">
-                <span>$<span>{{revenue.today ?? 0}}</span></span>
+                <span
+                  >$<span>{{ revenue.today ?? 0 }}</span></span
+                >
               </div>
               <div class="states">
                 <img src="@/assets/img/icons/trending-down.svg" alt="" />
@@ -23,7 +25,9 @@
                 <h3>Yesterday</h3>
               </div>
               <div class="revenue-detail-value">
-                <span>$<span>{{revenue.yesterday ?? 0}}</span></span>
+                <span
+                  >$<span>{{ revenue.yesterday ?? 0 }}</span></span
+                >
               </div>
               <div class="states">
                 <img src="@/assets/img/icons/trending-up.svg" alt="" />
@@ -35,7 +39,9 @@
                 <h3>Last Week</h3>
               </div>
               <div class="revenue-detail-value">
-                <span>$<span>{{revenue.thisWeek ?? 0}}</span></span>
+                <span
+                  >$<span>{{ revenue.thisWeek ?? 0 }}</span></span
+                >
               </div>
               <div class="states">
                 <img src="@/assets/img/icons/trending-down.svg" alt="" />
@@ -50,7 +56,9 @@
                 <p>This month total revenue</p>
               </div>
               <div class="revenue-detail-value">
-                <span>$<span>{{revenue.thisMonth ?? 0}}</span></span>
+                <span
+                  >$<span>{{ revenue.thisMonth ?? 0 }}</span></span
+                >
               </div>
               <div class="states">
                 <img src="@/assets/img/icons/trending-down.svg" alt="" />
@@ -68,7 +76,7 @@
               <h4>Last Orders</h4>
               <p>Items ordered recenlty</p>
             </div>
-            <div class="see-more">
+            <div class="see-more" @click="$router.push({ name: 'Orders' })">
               <img src="@/assets/img/icons/arrow-right.svg" alt="" />
             </div>
           </div>
@@ -114,14 +122,24 @@
                           :class="{
                             delivered: order.status == 'delivered',
                             pending: order.status == 'pending',
-            cancelled: order.status == 'cancelled' || order.status == 'rejected',
-
+                            cancelled:
+                              order.status == 'cancelled' ||
+                              order.status == 'rejected',
                           }"
                           >{{ order.status }}</span
                         >
                       </div>
                       <div class="order-options">
-                        <img src="@/assets/img/icons/settings.svg" alt="" @click="$router.push({ name: 'Order', params: { id: order.id } })" />
+                        <img
+                          src="@/assets/img/icons/settings.svg"
+                          alt=""
+                          @click="
+                            $router.push({
+                              name: 'Order',
+                              params: { id: order.id },
+                            })
+                          "
+                        />
                       </div>
                     </div>
                   </div>
@@ -136,7 +154,7 @@
               <h4>Latest Clients</h4>
               <p>Client registred recenlty</p>
             </div>
-            <div class="see-more">
+            <div class="see-more" @click="$router.push({ name: 'Users' })">
               <img src="@/assets/img/icons/arrow-right.svg" alt="" />
             </div>
           </div>
@@ -164,7 +182,12 @@
                       </div>
                       <div class="order-options">
                         <img
-                        @click="$router.push({ name: 'User', params: { id: client.id } })"
+                          @click="
+                            $router.push({
+                              name: 'User',
+                              params: { id: client.id },
+                            })
+                          "
                           src="@/assets/img/icons/more-horizontal.svg"
                           alt=""
                         />
@@ -184,55 +207,54 @@
 <script>
 import axios from "axios";
 
-
 export default {
-
-    data () {
-        return {
-            orders: [],
-            clients: [],
-            revenue: [],
-            todayRevenue : Number,
-            yesterdayRevenue : Number,
-
-        }
+  data() {
+    return {
+      orders: [],
+      clients: [],
+      revenue: [],
+      todayRevenue: Number,
+      yesterdayRevenue: Number,
+    };
+  },
+  methods: {
+    // get revenue
+    getRevenue() {
+      axios
+        .get("http://localhost/ceres/backend/productController/revenues/")
+        .then((response) => {
+          this.revenue = response.data;
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     },
-    methods: {
 
-        // get revenue
-        getRevenue() {
-            axios.get('http://localhost/ceres/backend/productController/revenues/')
-                .then(response => {
-                    this.revenue = response.data;
-                }).catch(error => {
-                    console.log(error);
-                });
-        },
-
-
-        // get orders axios
-        getOrders () {
-            return axios.get('http://localhost/ceres/backend/orderController/getLastOrders')
-                .then(response => {
-                    this.orders = response.data
-                }).catch(error => {
-                    console.log(error)
-                })
-        
-        },
-        // get clients axios
-        getClients () {
-            return axios.get('http://localhost/ceres/backend/userController/getLast4Clients')
-                .then(response => {
-                    this.clients = response.data
-                })
-        },
+    // get orders axios
+    getOrders() {
+      return axios
+        .get("http://localhost/ceres/backend/orderController/getLastOrders")
+        .then((response) => {
+          this.orders = response.data;
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     },
-    mounted () {
-        this.getOrders()
-        this.getClients()
-     this.getRevenue()
-    }
+    // get clients axios
+    getClients() {
+      return axios
+        .get("http://localhost/ceres/backend/userController/getLast4Clients")
+        .then((response) => {
+          this.clients = response.data;
+        });
+    },
+  },
+  mounted() {
+    this.getOrders();
+    this.getClients();
+    this.getRevenue();
+  },
 };
 </script>
 
@@ -244,6 +266,7 @@ $primary: #3ed749;
   justify-content: space-between;
   margin-bottom: 15px;
   .see-more {
+    cursor: pointer;
     background: $primary;
     padding: 12px;
     width: 50px;
@@ -252,9 +275,9 @@ $primary: #3ed749;
   }
 }
 .order-options {
-    img {
-        cursor: pointer;
-    }
+  img {
+    cursor: pointer;
+  }
 }
 .order-info {
   .order-avatar,
@@ -270,7 +293,6 @@ $primary: #3ed749;
     padding: 5px;
     background: #f6f6f6;
     border-radius: 5px;
-    
 
     //   align-items: center;
   }

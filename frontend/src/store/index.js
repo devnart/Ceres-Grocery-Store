@@ -33,6 +33,10 @@ export default createStore({
     SET_CART(state, product) {
       state.cart.push(product);
     },
+    // empty cart
+    CLEAR_CART(state) {
+      state.cart = [];
+    },
     
     REMOVE_CART(state, product) {
       state.cart.splice(state.cart.indexOf(product), 1);

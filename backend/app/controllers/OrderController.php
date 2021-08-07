@@ -49,6 +49,28 @@ class OrderController extends Controller
         $orderId = $this->data['orderId'];
         $status = $this->orderModel->pendingOrder($orderId);
     }
+    // get all orders
+    public function getAllOrders()
+    {
+        $page =  $this->data['page'];
+        $limit =  7;
+        $offset = ($page - 1) * $limit;
+        $orders = $this->orderModel->getAllOrders($limit, $offset);
+
+        if ($orders) {
+            $pages = ceil($orders[1] / $limit);
+
+            print_r(json_encode(
+                array(
+                    'orders' => $orders[0],
+                    'pages' => $pages,
+            )));
+            
+        } else {
+            print_r(json_encode("No users found"));
+        }
+
+    }
 
     // last orders
     public function getLastOrders()

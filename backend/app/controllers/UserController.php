@@ -38,14 +38,14 @@ class UserController extends Controller
         }
     }
     // check jwt token
-    public function checkToken(){
+    public function checkToken()
+    {
         $token = $this->data['token'];
 
         try {
-            if($this->verifyAuth($token)){
+            if ($this->verifyAuth($token)) {
                 print_r(json_encode("valid"));
             }
-            
         } catch (\Throwable $th) {
             //throw $th;
             print_r(json_encode(array(
@@ -73,6 +73,27 @@ class UserController extends Controller
             print_r(json_encode($clients));
         } else {
             print_r(json_encode("No clients found"));
+        }
+    }
+    // pagination
+    public function getAll()
+    {
+        $page =  $this->data['page'];
+        $limit =  7;
+        $offset = ($page - 1) * $limit;
+        $users = $this->userModel->getAll($limit, $offset);
+
+        if ($users) {
+            $pages = ceil($users[1] / $limit);
+
+            print_r(json_encode(
+                array(
+                    'users' => $users[0],
+                    'pages' => $pages,
+            )));
+            
+        } else {
+            print_r(json_encode("No users found"));
         }
     }
 
@@ -121,7 +142,7 @@ class UserController extends Controller
                 $this->verifyAuth($headers[1]);
                 $filename = $_FILES["uploadfile"]["name"];
                 $tempname = $_FILES["uploadfile"]["tmp_name"];
-                $folder = "./img/".$filename;
+                $folder = "./img/" . $filename;
 
                 if (move_uploaded_file($tempname, $folder)) {
                     $msg = "Image uploaded successfully";
@@ -212,7 +233,7 @@ class UserController extends Controller
                 $exploaded = get_object_vars($verify);
 
                 if ($exploaded['admin']) {
-                    
+
                     // *** The Important Stuff *** //
 
                     $this->userModel->deleteUser($id);

@@ -1,7 +1,7 @@
 <template>
   <div class="product">
     <div class="img-container">
-      <img src="@/assets/img/p1.jpg" alt="" />
+      <img :src="'http://localhost/ceres/backend/img/products/' + img" :alt="title" />
     </div>
     <div class="info">
       <input type="hidden" :value="pid" />
@@ -40,6 +40,7 @@ export default {
     pid: String,
     addToCart: Function,
     value: Number,
+    img: String,
   },
   data() {
     return {
@@ -69,6 +70,10 @@ $primary: #3ed749;
     border-radius: 10px;
     overflow: hidden;
     height: 190px;
+    img {
+      height: 100%;
+      object-fit: cover;
+    }
   }
 
   .info {

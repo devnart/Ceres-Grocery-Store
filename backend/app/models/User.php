@@ -40,7 +40,20 @@ class User
             return $e->getMessage();
         }
     }
-
+    // pagination
+    public function getAll($limit, $start)
+    {
+        // total rows
+        $this->db->query("SELECT COUNT(*) AS total FROM client");
+        $total = $this->db->single();
+        $total = $total->total;
+        
+        $this->db->query("SELECT * FROM client  ORDER BY registred DESC LIMIT :limit OFFSET :start");
+        $this->db->bind(':limit', $limit);
+        $this->db->bind(':start', $start);
+        $users = $this->db->resultSet();
+        return array($users, $total);
+    }
     // get all clients
     public function getAllClients()
     {
@@ -78,7 +91,6 @@ class User
     public function updateClientInfo($data,$id)
     {
 
-    
         $this->db->query("UPDATE client SET name=:name, email=:email WHERE id=:id");
 
         //Bind values

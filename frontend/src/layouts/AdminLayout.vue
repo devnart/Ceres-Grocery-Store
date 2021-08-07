@@ -38,17 +38,22 @@
       </div>
     </aside>
   </div>
-  <router-view></router-view>
+  <router-view :key="$route.fullPath"></router-view>
 </template>
 
 <script>
-export default {};
+export default {
+  name: 'AdminLayout',
+  methods: {
+  }
+};
 </script>
 
 <style lang="scss" scoped>
 $red: #fc573b;
 $yellow: #ffb848;
 $primary: #3ed749;
+
 
 .pending {
   color: $yellow !important;
@@ -111,6 +116,7 @@ aside {
       background: #eee;
       padding: 10px;
       border-radius: 5px;
+
     }
   }
   img {

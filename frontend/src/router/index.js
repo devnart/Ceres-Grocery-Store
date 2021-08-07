@@ -6,7 +6,11 @@ import Thanks from "../views/Thanks.vue";
 import Profile from "../views/Profile.vue";
 import Dashboard from "../views/Dashboard.vue";
 import Order from "../views/Order.vue";
+import Orders from "../views/Orders.vue";
+import Users from "../views/Users.vue";
 import User from "../views/User.vue";
+import Products from "../views/Products.vue";
+import AddProducts from "../views/AddProducts.vue";
 
 import store from "../store";
 
@@ -57,18 +61,63 @@ const routes = [
     meta: { requiresAuth: false, template: "admin" },
   },
   {
-    path: "/order/:id",
+    path: "/orders/:id",
     name: "Order",
     component: Order,
     meta: { requiresAuth: false, template: "admin" },
     
   },
   {
+    path: "/orders",
+    name: "Orders",
+    alias: '/orders/page/1',
+    component: Orders,
+    meta: { requiresAuth: false, template: "admin" },
+    
+  },
+  {
+    path: "/orders/page/:number",
+    name: "Orders List",
+    component: Orders,
+    meta: { requiresAuth: false, template: "admin" },
+    
+  },
+  {
+    path: "/products",
+    name: "Products",
+    // alias: '/users/page/1',
+    component: Products,
+    meta: { requiresAuth: false, template: "admin" },
+
+  },
+  {
+    path: "/products/add",
+    name: "Add Products",
+    component: AddProducts,
+    meta: { requiresAuth: false, template: "admin" },
+
+  },
+  {
+    path: "/users",
+    name: "Users",
+    alias: '/users/page/1',
+    component: Users,
+    meta: { requiresAuth: false, template: "admin" },
+
+  },
+  {
+    path: "/users/page/:number",
+    name: "Users List",
+    component: Users,
+    meta: { requiresAuth: false, template: "admin" },
+
+  },
+  {
     path: "/users/:id",
     name: "User",
     component: User,
     meta: { requiresAuth: false, template: "admin" },
-
+  
   },
 ];
 
