@@ -1,5 +1,5 @@
 <template>
-  <div class="layout-wrapper">
+  <div class="layout-wrapper" v-if="$route.name != 'AdminLogin' ">
     <aside>
       <div class="avatar">
         <img src="@/assets/img/cow.jpg" alt="{{user.name}}" />
@@ -34,7 +34,7 @@
         </ul>
       </div>
       <div class="logout">
-        <img src="@/assets/img/icons/log-out.svg" alt="logout" />
+        <img src="@/assets/img/icons/log-out.svg" alt="logout" @click="$store.dispatch('admin_logout')" />
       </div>
     </aside>
   </div>

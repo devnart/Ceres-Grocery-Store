@@ -10,10 +10,10 @@ class Admin
 
     public function find($data)
     {
-        $this->db->query("SELECT * FROM admin WHERE name = :name AND password = :password");
+        $this->db->query("SELECT * FROM admin WHERE email = :email AND password = :password");
 
         //Bind values
-        $this->db->bind(':name', $data['name']);
+        $this->db->bind(':email', $data['email']);
         $this->db->bind(':password', $data['password']);
 
         //Execute function

@@ -7,24 +7,28 @@ import { createToast } from "mosha-vue-toastify";
 import "mosha-vue-toastify/dist/style.css";
 
 export default createStore({
-  plugins: [createPersistedState({
-    reducer: (persistedState) => {
-      const stateFilter = Object.assign({}, persistedState)
-      const blackList = ['layout']
+  plugins: [
+    createPersistedState({
+      reducer: (persistedState) => {
+        const stateFilter = Object.assign({}, persistedState);
+        const blackList = ["layout"];
 
-      blackList.forEach((item) => {
-        delete stateFilter[item]
-      })
+        blackList.forEach((item) => {
+          delete stateFilter[item];
+        });
 
-      return stateFilter
-    }
-  })],
+        return stateFilter;
+      },
+    }),
+  ],
   state: {
     products: [],
     cart: [],
     isAuth: JSON.parse(localStorage.getItem("isAuth")) ?? false,
     user: {},
-    layout: 'user-layout'
+    admin: {},
+    layout: "user-layout",
+    isAdmin: JSON.parse(localStorage.getItem("isAdmin")) ?? false,
   },
   mutations: {
     SET_PRODUCTS(state, products) {
@@ -37,9 +41,21 @@ export default createStore({
     CLEAR_CART(state) {
       state.cart = [];
     },
-    
+
     REMOVE_CART(state, product) {
       state.cart.splice(state.cart.indexOf(product), 1);
+    },
+
+    SET_ADMIN_AUTH(state) {
+      state.isAdmin = true;
+      localStorage.setItem("isAdmin", true);
+    },
+    UNSET_ADMIN_AUTH(state) {
+      state.isAdmin = false;
+      localStorage.setItem("isAdmin", false);
+    },
+    SET_ADMIN(state, admin) {
+      state.admin = admin;
     },
 
     SET_AUTH(state, status) {
@@ -51,11 +67,24 @@ export default createStore({
     SET_USER(state, user) {
       state.user = user;
     },
-    SET_LAYOUT (state, payload) {
-      state.layout = payload
-    }
+    SET_LAYOUT(state, payload) {
+      state.layout = payload;
+    },
   },
   actions: {
+    // admin login
+    admin_login({ commit }, payload) {
+      commit("SET_ADMIN_AUTH");
+      commit("SET_ADMIN", payload);
+      router.push("/dashboard");
+    },
+
+    // admin logout
+    admin_logout({ commit }) {
+      commit("UNSET_ADMIN_AUTH");
+      commit("SET_ADMIN", {});
+      router.push("/dashboard/login");
+    },
     checkJWT({ commit }) {
       axios
         .post("http://localhost/ceres/backend/UserController/checkToken", {
@@ -113,12 +142,13 @@ export default createStore({
     logout({ commit }) {
       localStorage.removeItem("isAuth");
       commit("SET_AUTH", false);
+
     },
   },
   modules: {},
   getters: {
-    layout (state) {
-      return state.layout
-    }
-  }
+    layout(state) {
+      return state.layout;
+    },
+  },
 });

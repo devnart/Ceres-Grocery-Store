@@ -16,13 +16,12 @@ class AdminController extends Controller
     public function login(){
          
         $admin = $this->adminModel->find($this->data);
-
         if($admin){
 
-            $token = $this->adminAuth($admin->name, $admin->password);
+            $token = $this->adminAuth($admin->email, $admin->password);
             unset($admin->password);
             print_r(json_encode(array(
-                'User' => $admin,
+                'Admin' => $admin,
                 'Token' => $token,
             )));
         }else {

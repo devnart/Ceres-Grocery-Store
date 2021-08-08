@@ -1,5 +1,5 @@
 <template>
-  <div id="nav" class="container" v-if="this.$route.name != 'Login'">
+  <div id="nav" class="container" v-if="this.$route.name != 'Login' && this.$route.name != 'AdminLogin' ">
     <div class="logo">
       <router-link to="/"
         ><img src="@/assets/img/logo.png" alt="Ceres"
