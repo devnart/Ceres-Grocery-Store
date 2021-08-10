@@ -45,7 +45,7 @@
 export default {
   name: 'AdminLayout',
   methods: {
-  }
+  },
 };
 </script>
 
@@ -130,5 +130,6 @@ aside {
   background: #fc573b;
   padding: 10px;
   border-radius: 5px;
+  cursor: pointer;
 }
 </style>

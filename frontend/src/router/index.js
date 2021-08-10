@@ -12,6 +12,7 @@ import Users from "../views/Users.vue";
 import User from "../views/User.vue";
 import Products from "../views/Products.vue";
 import AddProducts from "../views/AddProducts.vue";
+import EditProduct from "../views/EditProduct.vue";
 
 import store from "../store";
 
@@ -88,7 +89,13 @@ const routes = [
   {
     path: "/products",
     name: "Products",
-    // alias: '/users/page/1',
+    alias: '/products/page/1',
+    component: Products,
+    meta: { requiresAdmin: true, template: "admin" },
+  },
+  {
+    path: "/products/page/:number",
+    name: "Products List",
     component: Products,
     meta: { requiresAdmin: true, template: "admin" },
   },
@@ -97,6 +104,13 @@ const routes = [
     name: "Add Products",
     component: AddProducts,
     meta: { requiresAdmin: true, template: "admin" },
+  },
+  {
+    path: "/products/edit/:id",
+    name: "Edit Products",
+    component: EditProduct,
+    props: true,
+    meta: { requiresAdmin: true, template: "admin" }
   },
   {
     path: "/users",
@@ -126,7 +140,10 @@ const router = createRouter({
 
 router.beforeEach((to, from, next) => {
 
-  if (to.meta.requiresAdmin && !store.state.isAdmin) next({ name: "AdminLogin" });
+  if (to.meta.requiresAdmin && !store.state.isAdmin ) next({ name: "AdminLogin" });
+  if(to.meta.requiresAdmin){
+    store.dispatch('checkAdminJWT');
+  }
 
 
   if (to.meta.requiresAuth && !store.state.isAuth) next({ name: "Login" });

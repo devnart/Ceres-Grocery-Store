@@ -20,15 +20,28 @@ class Product
         return $products;
     }
 
-    public function getAll()
+    public function getAll($limit, $start)
     {
+        // total rows
+        $this->db->query("SELECT COUNT(*) AS total FROM product");
+        $total = $this->db->single();
+        $total = $total->total;
 
-        $this->db->query('SELECT * FROM product');
+        $this->db->query('SELECT * FROM product  ORDER BY added DESC LIMIT :limit OFFSET :start');
+        $this->db->bind(':limit', $limit);
+        $this->db->bind(':start', $start);
+        $products = $this->db->resultSet();
+        return array($products, $total);
+    }
+
+    public function getProducts()
+    {
+        $this->db->query('SELECT * FROM product  ORDER BY added DESC');
         $products = $this->db->resultSet();
         return $products;
     }
 
-    public function addProduct($data,$avatar)
+    public function addProduct($data, $avatar)
     {
 
         $this->db->query('INSERT INTO product (name, description,img, category, price, unit) VALUES(:name, :description, :img, :category, :price, :unit)');
@@ -41,8 +54,7 @@ class Product
         $this->db->bind(':unit', $data['unit']);
 
         //Execute function 
-        if(!$this->db->execute())
-        {
+        if (!$this->db->execute()) {
             return false;
         }
         return true;
@@ -51,12 +63,11 @@ class Product
     public function updateProduct($data, $id)
     {
 
-        $this->db->query("UPDATE product SET name=:name, description=:description, img=:img, category=:category, price=:price, unit=:unit WHERE id=:id");
+        $this->db->query("UPDATE product SET name=:name, description=:description, category=:category, price=:price, unit=:unit WHERE id=:id");
 
         $this->db->bind(':id', $id);
         $this->db->bind(':name', $data['name']);
         $this->db->bind(':description', $data['description']);
-        $this->db->bind(':img', $data['img']);
         $this->db->bind(':category', $data['category']);
         $this->db->bind(':price', $data['price']);
         $this->db->bind(':unit', $data['unit']);
@@ -120,7 +131,7 @@ class Product
     {
 
         $this->db->query("SELECT SUM(totalPrice) AS 'revenue' FROM `orders` WHERE date(created)  =:yesterday ");
-        
+
         $this->db->bind(':yesterday', $yesterday);
         //Execute function
         $products = $this->db->single();

@@ -23,63 +23,42 @@ class ProductController extends Controller
     // get all products
     public function getProducts()
     {
-        $products = $this->productModel->getAll();
+        $page =  $this->data['page'];
+        $limit =  7;
+        $offset = ($page - 1) * $limit;
+        $products = $this->productModel->getAll($limit, $offset);
 
-        foreach ($products as $product) {
-            $product->qty = 1;
+        if ($products) {
+            $pages = ceil($products[1] / $limit);
+
+
+            print_r(json_encode(
+                array(
+                    'products' => $products[0],
+                    'pages' => $pages,
+                )
+            ));
+        } else {
+            print_r(json_encode("No Order found"));
         }
-        print_r(json_encode($products));
+    }
+
+    public function getAll()
+    {
+        $products = $this->productModel->getProducts();
+        if ($products) {
+            foreach ($products as $product) {
+                $product->qty = 1;
+            }
+
+            print_r(json_encode($products));
+        } else {
+            print_r(json_encode("No products found"));
+        }
     }
 
     // Add Product 
     public function addProduct()
-    {
-
-        // $headers = apache_request_headers();
-        // $headers = isset($headers['Authorization']) ? explode(' ', $headers['Authorization']) : null;
-        // if ($headers) {
-        // try {
-        // role management ( so only the admin can add products)
-        // $verify = $this->verifyAuth($headers[1]);
-        // $exploaded = get_object_vars($verify);
-
-        // if ($exploaded['admin']) {
-
-        // *** The Important Stuff *** //
-        // show $_files content
-        $filename = $_FILES["img"]["name"];
-        $tempname = $_FILES["img"]["tmp_name"];
-        $folder = "./img/products/" . $filename;
-
-        if (move_uploaded_file($tempname, $folder)) {
-            $msg = "Image uploaded successfully";
-        } else {
-            $msg = "Failed to upload image";
-        }
-        // $this->userModel->updateAvatar($id, $filename);
-        
-
-        $added = $this->productModel->addProduct($_REQUEST,$filename);
-        print_r(json_encode($added));
-        // } else {
-        //     print_r(json_encode(array(
-        //         "error" => "401",
-        //     )));
-        // }
-        // } catch (Throwable $th) {
-        //     print_r(json_encode(array(
-        //         "error" => "unauthorized1",
-        //     )));
-        // }
-        // } else {
-        //     print_r(json_encode(array(
-        //         "error" => "unauthorized2",
-        //     )));
-        // }
-    }
-
-    // update product
-    public function updateProduct($id)
     {
 
         $headers = apache_request_headers();
@@ -93,9 +72,25 @@ class ProductController extends Controller
                 if ($exploaded['admin']) {
 
                     // *** The Important Stuff *** //
+                    // show $_files content
+                    $filename = $_FILES["img"]["name"];
+                    $filesize = $_FILES["img"]["size"];
+                    $tempname = $_FILES["img"]["tmp_name"];
+                    $folder = "./img/products/" . $filename;
 
-                    $this->productModel->updateProduct($this->data, $id);
-                    print_r(json_encode('Product Updated Successfully'));
+                    if ($filesize > 8000000) {
+                        die(json_encode(array("error" => "File size is too big")));
+                    }
+
+                    if (move_uploaded_file($tempname, $folder)) {
+                        $msg = "Image uploaded successfully";
+                    } else {
+                        $msg = "Failed to upload image";
+                    }
+
+
+                    $added = $this->productModel->addProduct($_REQUEST, $filename);
+                    print_r(json_encode($added));
                 } else {
                     print_r(json_encode(array(
                         "error" => "401",
@@ -113,10 +108,45 @@ class ProductController extends Controller
         }
     }
 
-    public function deleteProduct($id)
+    // update product
+    public function updateProduct($id)
     {
 
+        $headers = apache_request_headers();
+        $headers = isset($headers['Authorization']) ? explode(' ', $headers['Authorization']) : null;
+        if ($headers) {
+            try {
+                // role management ( so only the admin can add products)
+                $verify = $this->verifyAuth($headers[1]);
+                $exploaded = get_object_vars($verify);
 
+                if ($exploaded['admin']) {
+
+                    // *** The Important Stuff *** //
+                    $this->productModel->updateProduct($_REQUEST, $id);
+                    print_r(json_encode(true));
+                } else {
+                    print_r(json_encode(array(
+                        "error" => "401",
+                    )));
+                }
+            } catch (Throwable $th) {
+                print_r(json_encode(array(
+                    "error" => "unauthorized1",
+                )));
+            }
+        } else {
+            print_r(json_encode(array(
+                "error" => "unauthorized2",
+            )));
+        }
+    }
+
+    public function deleteProduct()
+    {
+        header('Access-Control-Allow-Methods: DELETE');
+
+        $id = $this->data['id'];
         $headers = apache_request_headers();
         $headers = isset($headers['Authorization']) ? explode(' ', $headers['Authorization']) : null;
         if ($headers) {

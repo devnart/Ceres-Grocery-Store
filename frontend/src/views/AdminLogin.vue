@@ -115,12 +115,14 @@ a {
 
 h3 {
   font-size: 30px;
+  text-align: center;
+  margin-bottom: 20px;
 }
 
 .container {
   max-width: 100%;
 
-  background: #3ed749;
+  background: #f4fff2;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -132,32 +134,7 @@ h3 {
   width: 500px;
   border-radius: 10px;
   padding: 40px;
-
-  .toggle {
-    display: flex;
-    gap: 15px;
-    margin: 20px 0;
-  }
-
-  .active {
-    color: #111;
-    border-bottom: 3px solid $primary;
-    font-weight: 500;
-  }
-  a {
-    color: rgba(17, 17, 17, 0.5);
-    padding-bottom: 10px;
-  }
-
-  span {
-    margin-top: 10px;
-    display: block;
-    text-align: center;
-    font-size: 14px;
-    a {
-      color: $primary;
-    }
-  }
+  border: 3px solid $primary;
 }
 form {
   input {

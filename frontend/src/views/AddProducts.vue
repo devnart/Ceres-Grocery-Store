@@ -62,7 +62,7 @@
             </div>
             <div class="form-group">
               <input
-                type="number"
+                type="text"
                 id="price"
                 placeholder="Price"
                 name="price"
@@ -73,7 +73,7 @@
               <label for="image">
                 <div>
                   <p><span>Select a file</span> or drag in form</p>
-                  <p>PNG, jpg, gif files up to 10 MB in size</p>
+                  <p>PNG, jpg, files up to 8 MB in size</p>
                 </div>
                 <img
                   class="upload-icon"
@@ -81,7 +81,13 @@
                   alt=""
                 />
               </label>
-              <input type="file" name="img" id="image" @change="getImage" />
+              <input
+                accept="image/png, image/jpeg"
+                type="file"
+                name="img"
+                id="image"
+                @change="getImage"
+              />
             </div>
             <input type="submit" name="submit" value="+ Add Product" />
           </form>
@@ -134,12 +140,17 @@ export default {
 
     // get image
     getImage(file) {
-      console.log(file);
       this.img = file.target.files[0];
+
+      // console.log(eval(file.target.files[0].size / 1e6));
+      // if (eval(file.target.files[0].size / 1e6) > 8) {
+      //   alert("Image size is too large must be below 8MB");
+      // } else {
+      //   this.img = file.target.files[0];
+      // }
     },
 
     addProduct() {
-      // console.log();
       var formData = new FormData(this.$refs.form);
       for (var value of formData.values()) {
         console.log(value);
@@ -147,19 +158,18 @@ export default {
       for (var key of formData.keys()) {
         console.log(key);
       }
-      const headers = {
-        "Content-Type": "multipart/form-data",
+      const config = {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("admin_token")}`,
+          "Content-Type": "multipart/form-data",
+        },
       };
       // add product axios
       axios
         .post(
           "http://localhost/ceres/backend/productController/addProduct/",
           formData,
-          {
-            headers: {
-              "Content-Type": "multipart/form-data",
-            },
-          }
+          config
         )
         .then((response) => {
           console.log(response);

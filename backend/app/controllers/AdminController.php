@@ -29,4 +29,23 @@ class AdminController extends Controller
         }
     }
 
+    // check jwt token
+    public function checkAdminToken()
+    {
+        $token = $this->data['token'];
+        $verify = $this->verifyAuth($token);
+        $exploaded = get_object_vars($verify);
+
+        try {
+            if ($exploaded['admin']) {
+                print_r(json_encode("valid"));
+            }
+        } catch (\Throwable $th) {
+            //throw $th;
+            print_r(json_encode(array(
+                "error" => "unauthorized" . $th->getMessage(),
+            )));
+        }
+    }
+
 }

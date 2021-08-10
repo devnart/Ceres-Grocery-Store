@@ -102,12 +102,34 @@ export default createStore({
           console.log(error);
         });
     },
+    // check admin token
+    checkAdminJWT({ commit }) {
+      axios
+        .post(
+          "http://localhost/ceres/backend/adminController/checkAdminToken",
+          {
+            token: localStorage.getItem("admin_token"),
+          }
+        )
+        .then((response) => {
+          console.log(response);
+          if (response.data != "valid") {
+            localStorage.removeItem("isAdmin");
+            commit("SET_ADMIN_AUTH", false);
+            commit("SET_ADMIN", {});
+            router.push("/dashboard/login");
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
 
     // Get Products
 
     getProducts({ commit }) {
       axios
-        .get("http://localhost/ceres/backend/productController/getProducts/")
+        .get("http://localhost/ceres/backend/productController/getAll/")
         .then((response) => {
           commit("SET_PRODUCTS", response.data);
         });
@@ -142,7 +164,26 @@ export default createStore({
     logout({ commit }) {
       localStorage.removeItem("isAuth");
       commit("SET_AUTH", false);
+    },
 
+    // delete product
+    deleteProduct({ commit }, payload) {
+      axios
+        .delete(
+          "http://localhost/ceres/backend/productController/deleteProduct/",
+          {
+            data: {
+              id: payload,
+            },
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("admin_token")}`,
+            },
+          }
+        )
+        .then((response) => {
+          commit("SET_PRODUCTS", response.data);
+          router.push("/products");
+        });
     },
   },
   modules: {},

@@ -169,8 +169,9 @@ export default {
     },
   },
   created() {
+    this.$store.dispatch("checkJWT");
     this.finalCart();
-    console.log(this.products);
+
   },
 };
 </script>
