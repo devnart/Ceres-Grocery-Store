@@ -53,9 +53,9 @@ class Order
         $this->db->bind(':orderId', $orderId);
         $this->db->execute();
     }
-    
+
     // get all orders ordered by date
-    public function getAllOrders($limit,$start)
+    public function getAllOrders($limit, $start)
     {
 
         // total rows
@@ -63,12 +63,11 @@ class Order
         $total = $this->db->single();
         $total = $total->total;
 
-        $this->db->query('SELECT * FROM orders  ORDER BY created DESC LIMIT :limit OFFSET :start' );
+        $this->db->query('SELECT * FROM orders  ORDER BY created DESC LIMIT :limit OFFSET :start');
         $this->db->bind(':limit', $limit);
         $this->db->bind(':start', $start);
         $orders = $this->db->resultSet();
         return array($orders, $total);
-
     }
 
     // last orders
@@ -83,7 +82,7 @@ class Order
     // get order by id
     public function getOrderById($orderId)
     {
-        $this->db->query('SELECT o.id,c.name,c.email,o.products,o.status,o.totalPrice,o.adress,o.phone,o.first_name,o.last_name  FROM client c ,orders o WHERE c.id=o.clientId AND o.id=:orderId ');
+        $this->db->query('SELECT o.city, o.id,c.name,c.email,o.products,o.status,o.totalPrice,o.adress,o.phone,o.first_name,o.last_name  FROM client c ,orders o WHERE c.id=o.clientId AND o.id=:orderId ');
 
         // $this->db->query('SELECT * FROM orders WHERE id=:orderId');
         $this->db->bind(':orderId', $orderId);

@@ -41,6 +41,14 @@ class Product
         return $products;
     }
 
+    public function getProductsByCategory($category)
+    {
+        $this->db->query('SELECT * FROM product WHERE category=:category ORDER BY added DESC');
+        $this->db->bind(':category', $category);
+        $products = $this->db->resultSet();
+        return $products;
+    }
+
     public function addProduct($data, $avatar)
     {
 
@@ -98,13 +106,14 @@ class Product
     public function checkout($data)
     {
 
-        $this->db->query('INSERT INTO orders (clientId, products, first_name,last_name, phone, adress,totalPrice) VALUES(:clientId, :products, :first_name, :last_name, :phone, :adress, :totalPrice)');
+        $this->db->query('INSERT INTO orders (clientId, products, first_name,last_name, phone,city, adress,totalPrice) VALUES(:clientId, :products, :first_name, :last_name, :phone,:city, :adress, :totalPrice)');
 
         $this->db->bind(':clientId', $data['clientId']);
         $this->db->bind(':products', $data['products']);
         $this->db->bind(':first_name', $data['first_name']);
         $this->db->bind(':last_name', $data['last_name']);
         $this->db->bind(':phone', $data['phone']);
+        $this->db->bind(':city', $data['city']);
         $this->db->bind(':adress', $data['adress']);
         $this->db->bind(':totalPrice', $data['totalPrice']);
 
@@ -120,10 +129,12 @@ class Product
     public function revenueToday()
     {
 
-        $this->db->query("SELECT SUM(totalPrice) AS 'revenue' FROM `orders` WHERE date(created)  = CURDATE() ");
+        $this->db->query("SELECT SUM(totalPrice) AS 'revenue' FROM `orders` WHERE status = 'delivered' AND date(created)  = CURDATE() ");
 
         //Execute function
         $products = $this->db->single();
+        $products = $products->revenue;
+        $products = round($products, 2);
         return $products;
     }
 
@@ -135,6 +146,8 @@ class Product
         $this->db->bind(':yesterday', $yesterday);
         //Execute function
         $products = $this->db->single();
+        $products = $products->revenue;
+        $products = round($products, 2);
         return $products;
     }
 
@@ -145,6 +158,8 @@ class Product
         $this->db->bind(':thisweek', $thisweek);
         //Execute function
         $products = $this->db->single();
+        $products = $products->revenue;
+        $products = round($products, 2);
         return $products;
     }
 
@@ -155,6 +170,8 @@ class Product
 
         //Execute function
         $products = $this->db->single();
+        $products = $products->revenue;
+        $products = round($products, 2);
         return $products;
     }
 
@@ -165,6 +182,8 @@ class Product
 
         //Execute function
         $products = $this->db->single();
+        $products = $products->revenue;
+        $products = round($products, 2);
         return $products;
     }
 }

@@ -9,9 +9,21 @@
               >Order total:
               <span class="total">{{ order.totalPrice }}$</span></span
             >
-            <img src="@/assets/img/icons/close.svg" alt="Reject" @click="rejectOrder(order.id)" />
-            <img src="@/assets/img/icons/check.svg" alt="Accept" @click="acceptOrder(order.id)" />
-            <img src="@/assets/img/icons/drag.svg" alt="Pending" @click="pendingOrder(order.id)" />
+            <img
+              src="@/assets/img/icons/close.svg"
+              alt="Reject"
+              @click="rejectOrder(order.id)"
+            />
+            <img
+              src="@/assets/img/icons/check.svg"
+              alt="Accept"
+              @click="acceptOrder(order.id)"
+            />
+            <img
+              src="@/assets/img/icons/drag.svg"
+              alt="Pending"
+              @click="pendingOrder(order.id)"
+            />
           </div>
         </div>
       </div>
@@ -22,7 +34,8 @@
           :class="{
             delivered: order.status == 'delivered',
             pending: order.status == 'pending',
-            cancelled: order.status == 'cancelled' || order.status == 'rejected',
+            cancelled:
+              order.status == 'cancelled' || order.status == 'rejected',
           }"
           >{{ order.status }}</span
         >
@@ -41,6 +54,7 @@
             <div class="shipping-info">
               <h5>{{ order.first_name + " " + order.last_name }}</h5>
               <p>{{ order.adress }}</p>
+              <p>{{ order.city }}</p>
               <p>{{ order.phone }}</p>
             </div>
           </div>
@@ -95,8 +109,7 @@ export default {
           orderId,
         })
         .then((response) => {
-             this.getOrder();
-
+          this.getOrder();
         })
         .catch((error) => {
           console.log(error);
@@ -110,8 +123,7 @@ export default {
           orderId,
         })
         .then((response) => {
-              this.getOrder();
-
+          this.getOrder();
         })
         .catch((error) => {
           console.log(error);
@@ -125,15 +137,12 @@ export default {
           orderId,
         })
         .then((response) => {
-          
-    this.getOrder();
-
+          this.getOrder();
         })
         .catch((error) => {
           console.log(error);
         });
     },
-
   },
   created() {
     this.getOrder();
@@ -161,7 +170,7 @@ p {
   display: flex;
   gap: 5px;
   img {
-      cursor: pointer;
+    cursor: pointer;
     width: 40px;
     height: 40px;
   }

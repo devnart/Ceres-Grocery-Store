@@ -300,10 +300,9 @@ $primary: #3ed749;
     flex: 4;
   }
 }
-.row {
-  padding-top: 40px;
-}
+
 .row.tables {
+  padding-top: 20px;
   display: flex;
   justify-content: space-between;
   gap: 30px;
@@ -382,7 +381,8 @@ h4 + p {
   border-radius: 5px;
 }
 .order-info {
-  padding: 15px;
+  padding: 10px;
+  font-size: 13px;
   .order-avatar {
     width: 40px;
     height: 40px;

@@ -1,7 +1,7 @@
 <template>
   <div class="pagination">
     <div class="previous">
-      <router-link :to="`/${page}/page/${parseInt(currentPage)  - 1}`">
+      <router-link :to="`/${page}/page/${parseInt(currentPage) - 1}`">
         <i class="fas fa-chevron-left"></i>
       </router-link>
     </div>
@@ -16,9 +16,9 @@
       </router-link>
     </div>
     <div class="next">
-       <router-link :to="`/${page}/page/${parseInt(currentPage) + 1}`">
-      <i class="fas fa-chevron-right"></i>
-       </router-link>
+      <router-link :to="`/${page}/page/${parseInt(currentPage) + 1}`">
+        <i class="fas fa-chevron-right"></i>
+      </router-link>
     </div>
   </div>
 </template>
@@ -36,14 +36,14 @@ export default {
   },
   mounted() {
     // string to number
-    console.log(this.currentPage);
+    // console.log(this.currentPage);
   },
 };
 </script>
 
 <style lang="scss" scoped>
 a:visited {
-    color: inherit;
+  color: inherit;
 }
 .pagination {
   margin-top: 20px;

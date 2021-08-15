@@ -13,11 +13,19 @@ export default {
       return this.$store.getters.layout;
     },
   },
+  watch: {
+    $route: {
+      immediate: true,
+      handler(to, from) {
+        document.title = to.meta.title || "Ceres";
+      },
+    },
+  },
   components: {
     "user-layout": UserLayout,
     "admin-layout": AdminLayout,
   },
-  mounted() {
+  created() {
     this.$store.dispatch("getProducts");
   },
 };

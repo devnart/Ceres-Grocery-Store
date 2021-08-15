@@ -1,8 +1,8 @@
 <template>
   <div class="main">
     <div class="container">
-      <header>
-        <div class="col">
+      <header :class="mq.xs ? 'f-col' : ''">
+        <div class="col" :class="mq.xs ? 'f-col gap mb' : ''">
           <label class="edit-avatar" for="upload-file">
             <img src="@/assets/img/icons/pencil.svg" alt="" />
           </label>
@@ -37,7 +37,11 @@
       <section class="edit">
         <!-- edit profile -->
         <div class="edit-profile-content" v-if="isEditProfile">
-          <form class="edit-profile-form" @submit.prevent="editProfile">
+          <form
+            class="edit-profile-form"
+            @submit.prevent="editProfile"
+            :class="mq.smMinus ? 'f-col' : ''"
+          >
             <div class="edit-profile-form-input">
               <label for="name">Name</label>
               <input
@@ -59,13 +63,30 @@
               />
             </div>
             <div class="edit-profile-form-input">
+              <label for="email">Email</label>
+              <input
+                required
+                type="tel"
+                class="edit-profile-form-input-phone"
+                placeholder="Phone"
+                v-model="user.phone"
+              />
+            </div>
+            <div
+              class="edit-profile-form-input"
+              :style="mq.smMinus ? 'align-self:unset' : ''"
+            >
               <Submit text="Update" />
             </div>
           </form>
         </div>
 
         <div class="edit-profile-content" v-if="isEditPassword">
-          <form class="edit-profile-form" @submit.prevent="editPassword">
+          <form
+            class="edit-profile-form"
+            @submit.prevent="editPassword"
+            :class="mq.smMinus ? 'f-col' : ''"
+          >
             <div class="edit-profile-form-input">
               <label for="name">Old Password</label>
               <input
@@ -96,7 +117,10 @@
                 v-model="confirmPassword"
               />
             </div>
-            <div class="edit-profile-form-input">
+            <div
+              class="edit-profile-form-input"
+              :style="mq.smMinus ? 'align-self:unset' : ''"
+            >
               <Submit text="Update Password" />
             </div>
           </form>
@@ -107,10 +131,14 @@
         <div class="table">
           <div class="thead">
             <div class="tr">
-              <div class="th">Id</div>
+              <div class="th" :class="mq.xs ? 'd-none' : ''">Id</div>
               <div class="th orders">Orders</div>
-              <div class="th date">Date</div>
-              <div class="th adress">Adress</div>
+              <div class="th date" :class="mq.smMinus ? 'd-none' : ''">
+                Date
+              </div>
+              <div class="th adress" :class="mq.smMinus ? 'd-none' : ''">
+                Adress
+              </div>
               <div class="th">Total</div>
               <div class="th">Status</div>
               <div class="th">Cancel</div>
@@ -121,16 +149,16 @@
             <div class="tr" v-for="order in orders" :key="order.id">
               <div class="td">
                 <div class="order-info">
-                  <div class="order-number">
+                  <div class="order-number" :class="mq.xs ? 'd-none' : ''">
                     <span class="number">#{{ order.id }}</span>
                   </div>
                   <div class="order-title">
                     <span class="title">{{ order.products }}</span>
                   </div>
-                  <div class="order-date">
+                  <div class="order-date" :class="mq.smMinus ? 'd-none' : ''">
                     <span class="date">{{ order.created }}</span>
                   </div>
-                  <div class="order-adress">
+                  <div class="order-adress" :class="mq.smMinus ? 'd-none' : ''">
                     <span class="adress">{{ order.adress }}</span>
                   </div>
                   <div class="order-price">
@@ -142,7 +170,9 @@
                       :class="{
                         delivered: order.status == 'delivered',
                         pending: order.status == 'pending',
-                        cancelled: order.status == 'rejected' || order.status == 'cancelled',
+                        cancelled:
+                          order.status == 'rejected' ||
+                          order.status == 'cancelled',
                       }"
                       >{{ order.status }}</span
                     >
@@ -175,6 +205,8 @@ import "mosha-vue-toastify/dist/style.css";
 import axios from "axios";
 
 export default {
+  inject: ["mq"],
+
   components: {
     ButtonFilled,
     Submit,
@@ -209,7 +241,7 @@ export default {
         )
         .then((response) => {
           if (response.data == "unauthorized Token") {
-            this.$store.dispatch('checkJWT')
+            this.$store.dispatch("checkJWT");
           } else {
             this.getUser();
           }
@@ -296,6 +328,7 @@ export default {
           {
             name: this.user.name,
             email: this.user.email,
+            phone: this.user.phone,
           },
           config
         )
@@ -532,23 +565,36 @@ header {
     justify-content: center;
     img {
       width: 32px;
+      cursor: pointer;
       height: 32px;
     }
   }
 }
-  .status {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 5px;
+.status {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
 
-    &::before {
-      content: "";
-      display: block;
-      background: $yellow;
-      width: 10px;
-      height: 10px;
-      border-radius: 50px;
-    }
+  &::before {
+    content: "";
+    display: block;
+    background: $yellow;
+    width: 10px;
+    height: 10px;
+    border-radius: 50px;
   }
+}
+// sm media query
+@media (max-width: 767px) {
+  .edit-profile-form-input {
+    width: 70%;
+  }
+}
+// xs media queries
+@media (max-width: 580px) {
+  span {
+    font-size: 13px;
+  }
+}
 </style>

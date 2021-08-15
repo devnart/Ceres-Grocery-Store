@@ -43,9 +43,10 @@
           <a @click.prevent="toggleForm('register')" href="#">Register</a></span
         >
       </form>
-      <form v-if="currentTab == 'register'" @submit.prevent="checkEmail">
+      <form v-if="currentTab == 'register'" @submit.prevent="register">
         <div class="input-group">
           <input
+            required
             type="text"
             id="name"
             name="name"
@@ -55,6 +56,7 @@
         </div>
         <div class="input-group">
           <input
+            required
             type="email"
             id="email"
             name="email"
@@ -64,6 +66,17 @@
         </div>
         <div class="input-group">
           <input
+            required
+            type="tel"
+            id="phone"
+            name="phone"
+            v-model="phone"
+            placeholder="Phone"
+          />
+        </div>
+        <div class="input-group">
+          <input
+            required
             type="password"
             id="password"
             name="password"
@@ -100,6 +113,7 @@ export default {
       name: "",
       password: "",
       email: "",
+      phone: "",
       store: {},
       user_id: "",
       currentTab: "login",
@@ -137,7 +151,7 @@ export default {
 
         localStorage.setItem("user_id", this.user_id);
         localStorage.setItem("token", this.store);
-      this.$store.state.user = jwt.User;
+        this.$store.state.user = jwt.User;
         this.$store.dispatch("login");
 
         createToast("Login successfully", {
@@ -161,26 +175,9 @@ export default {
         });
       }
     },
-    
-    register() {
-      console.log(this.checkEmail);
-      if (!this.checkEmail()) {
-        axios
-          .post("http://localhost/ceres/backend/UserController/register/", {
-            name: this.name,
-            email: this.email,
-            password: this.password,
-          })
-          .then(function (response) {
-            console.log(response);
-          })
-          .catch(function (error) {
-            console.log(error);
-          });
-      }
-    },
 
-    checkEmail() {
+    register() {
+      self = this;
       axios
         .post("http://localhost/ceres/backend/UserController/checkEmail", {
           email: this.email,
@@ -192,15 +189,31 @@ export default {
                 name: this.name,
                 email: this.email,
                 password: this.password,
+                phone: this.phone,
               })
               .then(function (response) {
-                console.log(response);
+                createToast("Registred Successflly 😄", {
+                  showIcon: true,
+                  swipeClose: true,
+                  position: "bottom-center",
+                  type: "success",
+                  transition: "slide",
+                  timeout: 4000,
+                });
+                self.currentTab = "login";
               })
               .catch(function (error) {
                 console.log(error);
               });
           } else {
-            alert("email already exist");
+            createToast("Email Already Exist! 😮", {
+              showIcon: true,
+              swipeClose: true,
+              position: "bottom-center",
+              type: "danger",
+              transition: "slide",
+              timeout: 4000,
+            });
           }
         });
     },

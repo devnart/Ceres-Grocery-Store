@@ -24,12 +24,13 @@ class User
 
     public function storeClient($data)
     {
-        $this->db->query('INSERT INTO client (name, email, password) VALUES(:name, :email, :password)');
+        $this->db->query('INSERT INTO client (name, email,phone, password) VALUES(:name, :email,:phone, :password)');
 
         //Bind values
 
         $this->db->bind(':name', $data['name']);
         $this->db->bind(':email', $data['email']);
+        $this->db->bind(':phone', $data['phone']);
         $this->db->bind(':password', $data['password']);
 
         //Execute function
@@ -47,7 +48,7 @@ class User
         $this->db->query("SELECT COUNT(*) AS total FROM client");
         $total = $this->db->single();
         $total = $total->total;
-        
+
         $this->db->query("SELECT * FROM client  ORDER BY registred DESC LIMIT :limit OFFSET :start");
         $this->db->bind(':limit', $limit);
         $this->db->bind(':start', $start);
@@ -77,8 +78,8 @@ class User
         $this->db->bind(':id', $id);
         $user = $this->db->single();
         return $user;
-    }  
-    
+    }
+
     // update avatar
     public function updateAvatar($id, $avatar)
     {
@@ -87,16 +88,17 @@ class User
         $this->db->bind(':id', $id);
         $this->db->execute();
     }
-    
-    public function updateClientInfo($data,$id)
+
+    public function updateClientInfo($data, $id)
     {
 
-        $this->db->query("UPDATE client SET name=:name, email=:email WHERE id=:id");
+        $this->db->query("UPDATE client SET name=:name, email=:email, phone=:phone WHERE id=:id");
 
         //Bind values
 
         $this->db->bind(':name', $data['name']);
         $this->db->bind(':email', $data['email']);
+        $this->db->bind(':phone', $data['phone']);
         $this->db->bind(':id', $id);
 
         //Execute function
@@ -108,7 +110,8 @@ class User
         }
     }
 
-    public function checkPassword($data,$id){
+    public function checkPassword($data, $id)
+    {
         $this->db->query("SELECT * FROM client WHERE id = :id AND password = :password");
 
         $this->db->bind(':id', $id);
@@ -116,10 +119,9 @@ class User
 
         $this->db->execute();
         return $this->db->rowCount();
-
     }
 
-    public function updateClientPassword($data,$id)
+    public function updateClientPassword($data, $id)
     {
         $this->db->query("UPDATE client SET password=:password WHERE id=:id");
 
@@ -137,7 +139,8 @@ class User
         }
     }
 
-    public function checkEmail($data){
+    public function checkEmail($data)
+    {
 
         $this->db->query("SELECT * FROM client WHERE email=:email");
 
@@ -145,10 +148,10 @@ class User
 
         $this->db->execute();
         return $this->db->rowCount();
-
     }
 
-    public function deleteUser($id){
+    public function deleteUser($id)
+    {
         $this->db->query("DELETE FROM client WHERE id=:id");
 
         $this->db->bind(':id', $id);
@@ -157,7 +160,7 @@ class User
         try {
             $this->db->execute();
             return "ok";
-        } catch(PDOException $e) {
+        } catch (PDOException $e) {
             return $e->getMessage();
         }
     }

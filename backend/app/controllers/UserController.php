@@ -90,8 +90,8 @@ class UserController extends Controller
                 array(
                     'users' => $users[0],
                     'pages' => $pages,
-            )));
-            
+                )
+            ));
         } else {
             print_r(json_encode("No users found"));
         }
@@ -223,6 +223,7 @@ class UserController extends Controller
 
     public function delete($id)
     {
+        header('Access-Control-Allow-Methods: DELETE');
 
         $headers = apache_request_headers();
         $headers = isset($headers['Authorization']) ? explode(' ', $headers['Authorization']) : null;

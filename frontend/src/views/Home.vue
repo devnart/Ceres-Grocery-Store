@@ -1,18 +1,24 @@
 <template>
-  <div class="home container">
-    <div class="hero row">
-      <div class="column">
-        <p>For You To Prepare At Home.</p>
-        <h1>Food service that delivers freshly.</h1>
-        <ButtonFilled to="/signup" text="Try it for Free!" />
-      </div>
-      <div class="column">
-        <img src="@/assets/img/hero.png" alt="Delivery Man" />
-      </div>
+  <div class="home">
+    <div class="hero container row" :class="mq.xs ? 'f-col text-center' : ''">
+      <transition name="fade" appear>
+        <div class="column" :class="mq.xs ? 'mb' : ''">
+          <p>For You To Prepare At Home.</p>
+          <h1 :style="mq.sm ? 'font-size: 44px;' : ''">
+            Food service that delivers freshly.
+          </h1>
+          <ButtonFilled to="/about" text="Read More" />
+        </div>
+      </transition>
+      <transition name="slide-right" appear>
+        <div class="column">
+          <img src="@/assets/img/hero.png" alt="Delivery Man" />
+        </div>
+      </transition>
     </div>
 
     <section class="about">
-      <div class="row">
+      <div class="row" :class="mq.xs ? 'f-col' : ''">
         <div class="col">
           <h2>Delivering the best to the best!</h2>
         </div>
@@ -20,26 +26,79 @@
           <p>From the field to your hands.</p>
           <h2>What is Our Mission?</h2>
           <p>
-            Imperdiet tristique tristique integer et enim in felis, velit.
-            Ultricies massa bibendum leo vulputate. Donec nibh lectus varius leo
-            eget ultrices. Turpis vel sed sed lacus, tellus odio id nec egestas.
-            Nullam ante sed vestibulum egestas.
+            The freshness of the produce being delivered to you is
+            unquestionable, even in the case of standard delivery. Veggies like
+            banana stem and banana flower, which are used in exotic dishes, are
+            fresh and readily available to buy online at bigbasket. Vegetables
+            like mushrooms and sprouts, which are prone to quick spoilage are
+            also packed with utmost care using the best materials.
           </p>
         </div>
       </div>
     </section>
-    <section class="products">
+    <section class="products container popular" v-if="getProducts">
+      <h2>Recently Added</h2>
+      <div class="row" :style="mq.xs ? 'gap: 10px' : ''">
+        <Product
+          :style="mq.xs ? 'padding: 25px' : ''"
+          v-for="product in filteredProducts"
+          :key="product.id"
+          :title="product.name"
+          :price="product.price"
+          :value="product.qty"
+          :img="product.img"
+          @decrease="product.qty--"
+          @increase="product.qty++"
+          @add="
+            $store.dispatch('addToCart', {
+              product: product,
+              qty: product.qty,
+            })
+          "
+        />
+      </div>
+    </section>
+    <section class="products container fruits">
+      <h2>Fruits</h2>
       <div class="row">
         <Product
-          v-for="item in $store.state.products"
-          :key="item.id"
-          :title="item.name"
-          :price="item.price"
-          :value="item.qty"
-          :img="item.img"
-          @decrease="item.qty--"
-          @increase="item.qty++"
-          @add="$store.dispatch('addToCart', { product: item, qty: item.qty })"
+          :style="mq.xs ? 'padding: 25px' : ''"
+          v-for="product in filteredProductsByFruits"
+          :key="product.id"
+          :title="product.name"
+          :price="product.price"
+          :value="product.qty"
+          :img="product.img"
+          @decrease="product.qty--"
+          @increase="product.qty++"
+          @add="
+            $store.dispatch('addToCart', {
+              product: product,
+              qty: product.qty,
+            })
+          "
+        />
+      </div>
+    </section>
+    <section class="products container vegetables">
+      <h2>Vegetables</h2>
+      <div class="row">
+        <Product
+          :style="mq.xs ? 'padding: 25px' : ''"
+          v-for="product in filteredProductsByVegetables"
+          :key="product.id"
+          :title="product.name"
+          :price="product.price"
+          :value="product.qty"
+          :img="product.img"
+          @decrease="product.qty--"
+          @increase="product.qty++"
+          @add="
+            $store.dispatch('addToCart', {
+              product: product,
+              qty: product.qty,
+            })
+          "
         />
       </div>
     </section>
@@ -51,32 +110,74 @@
 import ButtonFilled from "@/components/ButtonFilled.vue";
 import Product from "@/components/Product.vue";
 
-
-
 export default {
+  inject: ["mq"],
   name: "Home",
-  
+
   components: {
     ButtonFilled,
     Product,
   },
   data() {
-    return {};
+    return {
+      products: this.$store.state.products,
+      show: false,
+    };
   },
   methods: {},
+  computed: {
+    getProducts() {
+      this.products = this.$store.state.products;
+      return this.products;
+    },
+    filteredProducts() {
+      return this.products.slice(0, 4);
+    },
+
+    filteredProductsByFruits() {
+      let product = this.products.filter(
+        (product) => product.category === "fruits"
+      );
+      let sliced = product.slice(0, 4);
+      return sliced;
+    },
+    filteredProductsByVegetables() {
+      let product = this.products.filter(
+        (product) => product.category === "vegetables"
+      );
+      let sliced = product.slice(0, 4);
+      return sliced;
+    },
+  },
   mounted() {
     this.$store.dispatch("getProducts");
+    this.show = true;
   },
-  computed: {},
 };
 </script>
 
 
 <style scoped lang="scss">
 $primary: #3ed749;
+
+.slide-right-enter-active,
+.slide-right-leave-active {
+  transition: all 0.8s ease-in-out;
+}
+.slide-right-enter-from, .slide-right-leave-to /* .fade-leave-active below version 2.1.8 */ {
+  transform: translateX(100%);
+  opacity: 0;
+}
+.fade-enter-active,
+.fade-leave-active {
+  transition: all 0.8s ease-in-out;
+}
+.fade-enter-from, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+  transform: translateX(-100%);
+  opacity: 0;
+}
 .row {
   font-family: "Recoleta", serif;
-
   display: flex;
   align-items: center;
 }
@@ -94,7 +195,7 @@ $primary: #3ed749;
 }
 
 .about {
-  margin: 120px 0;
+  margin-top: 120px;
   background: $primary;
   padding: 190px 0;
   .row {
@@ -142,10 +243,32 @@ $primary: #3ed749;
     margin: 15px 0;
   }
 }
-.products {
+section.products {
+  h2 {
+    font-family: "Recoleta", serif;
+    margin-bottom: 15px;
+    font-size: 28px;
+  }
   .row {
-    gap: 30px;
+    justify-content: center;
+    gap: 20px;
     flex-wrap: wrap;
+  }
+}
+section.products.fruits,
+section.products.vegetables {
+  margin-top: 60px;
+}
+.popular {
+  margin-top: -120px;
+  h2 {
+    color: white;
+  }
+}
+// xs media queries
+@media (max-width: 580px) {
+  .products:not(.popular) {
+    margin-top: 0 !important;
   }
 }
 </style>

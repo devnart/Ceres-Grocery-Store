@@ -140,14 +140,12 @@ export default {
 
     // get image
     getImage(file) {
-      this.img = file.target.files[0];
-
-      // console.log(eval(file.target.files[0].size / 1e6));
-      // if (eval(file.target.files[0].size / 1e6) > 8) {
-      //   alert("Image size is too large must be below 8MB");
-      // } else {
-      //   this.img = file.target.files[0];
-      // }
+      // max input size
+      if (eval(file.target.files[0].size / 1e6) > 8) {
+        alert("Image size is too large must be below 8MB");
+      } else {
+        this.img = file.target.files[0];
+      }
     },
 
     addProduct() {

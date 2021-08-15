@@ -18,19 +18,53 @@
             <div class="tr" v-for="order in orders" :key="order.id">
               <div class="td">
                 <div class="order-info">
-                  <div class="order-id">
+                  <div
+                    class="order-id"
+                    @click="
+                      $router.push({
+                        name: 'Order',
+                        params: { id: order.id },
+                      })
+                    "
+                  >
                     <span class="id">#{{ order.id }}</span>
                   </div>
-                  <div class="user-name">
+                  <div
+                    class="user-name"
+                    @click="
+                      $router.push({
+                        name: 'Order',
+                        params: { id: order.id },
+                      })
+                    "
+                  >
                     <span class="name">{{
                       order.first_name + " " + order.last_name
                     }}</span>
                   </div>
-                  <div class="order-orders">
+                  <div
+                    class="order-orders"
+                    @click="
+                      $router.push({
+                        name: 'Order',
+                        params: { id: order.id },
+                      })
+                    "
+                  >
                     <span class="orders">{{ order.products }}</span>
                   </div>
-                  <div class="order-adress">
-                    <span class="order">{{ order.adress }}</span>
+                  <div
+                    class="order-adress"
+                    @click="
+                      $router.push({
+                        name: 'Order',
+                        params: { id: order.id },
+                      })
+                    "
+                  >
+                    <span class="order"
+                      >{{ order.adress }}, {{ order.city }}</span
+                    >
                   </div>
                   <div class="order-status" v-if="order.status == 'pending'">
                     <img
@@ -166,6 +200,13 @@ a {
   }
 }
 .orders {
+  .tr:not(:first-child) {
+    cursor: pointer;
+    transition: 200ms;
+    &:hover {
+      transform: translateX(5px);
+    }
+  }
   padding-top: 20px;
   .table {
     margin-top: 15px;
@@ -204,7 +245,7 @@ a {
 }
 
 .order-status {
-    justify-content: center;
+  justify-content: center;
   align-items: center;
   display: flex;
   gap: 5px;

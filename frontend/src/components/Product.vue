@@ -1,7 +1,10 @@
 <template>
   <div class="product">
     <div class="img-container">
-      <img :src="'http://localhost/ceres/backend/img/products/' + img" :alt="title" />
+      <img
+        :src="'http://localhost/ceres/backend/img/products/' + img"
+        :alt="title"
+      />
     </div>
     <div class="info">
       <input type="hidden" :value="pid" />
@@ -64,6 +67,7 @@ $primary: #3ed749;
 .product {
   background-color: #fbfbfb;
   padding: 35px;
+  margin-bottom: 35px;
   border-radius: 10px;
   .img-container {
     width: 180px;
@@ -156,7 +160,7 @@ input::-webkit-inner-spin-button {
 }
 
 /* Firefox */
-input[type=number] {
+input[type="number"] {
   -moz-appearance: textfield;
 }
 </style>

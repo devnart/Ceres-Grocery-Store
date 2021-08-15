@@ -34,7 +34,9 @@
                     <span class="email">{{ user.email }}</span>
                   </div>
                   <div class="user-phone">
-                    <span class="phone">0706081245</span>
+                    <span class="phone">{{
+                      user.phone == "" ? "Not Available" : user.phone
+                    }}</span>
                   </div>
                   <div class="user-role">
                     <span class="role">{{ user.role }}</span>
@@ -54,7 +56,11 @@
           </div>
         </div>
       </section>
-      <pagination :currentPage="currentPage" :pageCount="totalPages" page="users" />
+      <pagination
+        :currentPage="currentPage"
+        :pageCount="totalPages"
+        page="users"
+      />
     </div>
   </main>
 </template>
@@ -165,6 +171,7 @@ export default {
 
     &:hover {
       background: #3ed749;
+    }
   }
-}}
+}
 </style>

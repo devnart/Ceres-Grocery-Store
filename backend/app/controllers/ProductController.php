@@ -57,6 +57,21 @@ class ProductController extends Controller
         }
     }
 
+    // get products by category
+    public function getProductsByCategory($category)
+    {
+        $products = $this->productModel->getProductsByCategory($category);
+        if ($products) {
+            foreach ($products as $product) {
+                $product->qty = 1;
+            }
+            print_r(json_encode($products));
+        } else {
+            print_r(json_encode(false));
+        }
+    }
+
+
     // Add Product 
     public function addProduct()
     {
@@ -218,7 +233,7 @@ class ProductController extends Controller
     {
 
         $r = $this->productModel->revenueToday();
-        return $r->revenue;
+        return $r;
         // print_r();
 
         // Calculate the Difference
@@ -236,7 +251,7 @@ class ProductController extends Controller
     {
         $yesterday = date('Y-m-d', strtotime('-1 day'));
         $r = $this->productModel->revenueYesterday($yesterday);
-        return $r->revenue;
+        return $r;
 
         // return print_r($r->revenue);
     }
@@ -246,7 +261,7 @@ class ProductController extends Controller
         $thisWeek = date('Y-m-d', strtotime('-7 day'));
         $r = $this->productModel->revenueThisWeek($thisWeek);
         // return print_r($r->revenue);
-        return $r->revenue;
+        return $r;
     }
 
     // Calculate Earning (This Month)
@@ -255,7 +270,7 @@ class ProductController extends Controller
 
         $r = $this->productModel->thisMonthRevenue();
         // print_r($r->revenue);
-        return $r->revenue;
+        return $r;
     }
 
     // Calculate Earning (Previous Month)
@@ -263,6 +278,6 @@ class ProductController extends Controller
     {
 
         $r = $this->productModel->previousMonthRevenue();
-        print_r($r->revenue);
+        print_r($r);
     }
 }

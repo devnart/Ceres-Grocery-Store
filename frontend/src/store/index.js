@@ -112,7 +112,6 @@ export default createStore({
           }
         )
         .then((response) => {
-          console.log(response);
           if (response.data != "valid") {
             localStorage.removeItem("isAdmin");
             commit("SET_ADMIN_AUTH", false);
@@ -132,6 +131,8 @@ export default createStore({
         .get("http://localhost/ceres/backend/productController/getAll/")
         .then((response) => {
           commit("SET_PRODUCTS", response.data);
+
+          localStorage.setItem("products", JSON.stringify(response.data));
         });
     },
 
@@ -167,7 +168,7 @@ export default createStore({
     },
 
     // delete product
-    deleteProduct({ commit }, payload) {
+    deleteProduct({ commit, state }, payload) {
       axios
         .delete(
           "http://localhost/ceres/backend/productController/deleteProduct/",
@@ -182,7 +183,15 @@ export default createStore({
         )
         .then((response) => {
           commit("SET_PRODUCTS", response.data);
-          router.push("/products");
+          createToast("Item deleted successfully", {
+            showIcon: true,
+            swipeClose: true,
+            position: "bottom-center",
+            type: "success",
+            transition: "slide",
+            timeout: 3000,
+          });
+          router.push("/dashboard");
         });
     },
   },

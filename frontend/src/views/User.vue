@@ -1,5 +1,4 @@
 <template>
-  
   <div class="main">
     <div class="container">
       <header>
@@ -14,13 +13,13 @@
             <h2 class="name">{{ user.name }}</h2>
 
             <p class="email">{{ user.email }}</p>
+            <p class="phone">{{ user.phone }}</p>
             <p class="role">{{ user.role }}</p>
-          <ButtonFilled to="#" text="Delete User" @click="deleteUser" />
-
+            <ButtonFilled to="#" text="Delete User" @click="deleteUser" />
           </div>
         </div>
       </header>
-      
+
       <section class="orders">
         <h3>User Orders</h3>
         <div class="table">
@@ -60,7 +59,9 @@
                       :class="{
                         delivered: order.status == 'delivered',
                         pending: order.status == 'pending',
-                        cancelled: order.status == 'rejected' || order.status == 'cancelled',
+                        cancelled:
+                          order.status == 'rejected' ||
+                          order.status == 'cancelled',
                       }"
                       >{{ order.status }}</span
                     >
@@ -81,7 +82,7 @@ import ButtonFilled from "@/components/ButtonFilled.vue";
 import axios from "axios";
 
 export default {
- components: {
+  components: {
     ButtonFilled,
   },
   data() {
@@ -91,9 +92,9 @@ export default {
     };
   },
   methods: {
-      // get user data
+    // get user data
     getUser() {
-      const id = this.$route.params.id
+      const id = this.$route.params.id;
       axios
         .post("http://localhost/ceres/backend/UserController/getUser", { id })
         .then((response) => {
@@ -104,9 +105,8 @@ export default {
         });
     },
 
-    
     getOrderByUid() {
-      const userId = this.$route.params.id
+      const userId = this.$route.params.id;
       // get product by uid
       // with axios post
       axios
@@ -125,42 +125,48 @@ export default {
     // delete user
     deleteUser() {
       axios
-        .post(`http://localhost/ceres/backend/UserController/delete/${this.$route.params.id}`,)
+        .delete(
+          `http://localhost/ceres/backend/UserController/delete/${this.$route.params.id}`,
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("admin_token")}`,
+            },
+          }
+        )
         .then((response) => {
-          console.log(response);
+          this.$router.push("/users");
         })
         .catch((error) => {
           console.log(error);
-        });}
-
+        });
+    },
   },
 
-  
   mounted() {
     this.getUser();
     this.getOrderByUid();
   },
-}
+};
 </script>
 
 <style lang="scss" scoped>
-    header {
-        justify-content: center;
+header {
+  justify-content: center;
 
-        .info {
-            text-align: center;
-        }
-    }
-.info {
-    a {
-        color: white;
-        background-color: #fc573b;
-        border: 2px solid #fc573b;
-
-        &:hover {
-            background-color: transparent;
-            color: #fc573b;}
-    }
+  .info {
+    text-align: center;
+  }
 }
+.info {
+  a {
+    color: white;
+    background-color: #fc573b;
+    border: 2px solid #fc573b;
 
+    &:hover {
+      background-color: transparent;
+      color: #fc573b;
+    }
+  }
+}
 </style>

@@ -80,6 +80,9 @@
 </template>
 
 <script>
+import { createToast } from "mosha-vue-toastify";
+import "mosha-vue-toastify/dist/style.css";
+
 import Pagination from "@/components/Pagination.vue";
 // import Modal from "@/components/Modal.vue";
 
@@ -122,7 +125,30 @@ export default {
 
     // delete product
     deleteProduct(id) {
-      this.$store.dispatch("deleteProduct", id);
+      axios
+        .delete(
+          "http://localhost/ceres/backend/productController/deleteProduct/",
+          {
+            data: {
+              id: id,
+            },
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("admin_token")}`,
+            },
+          }
+        )
+        .then((response) => {
+          this.getProducts();
+
+          createToast("Item deleted successfully", {
+            showIcon: true,
+            swipeClose: true,
+            position: "bottom-center",
+            type: "success",
+            transition: "slide",
+            timeout: 3000,
+          });
+        });
     },
   },
   mounted() {
