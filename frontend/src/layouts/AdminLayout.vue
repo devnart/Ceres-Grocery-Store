@@ -1,5 +1,5 @@
 <template>
-  <div class="layout-wrapper" v-if="$route.name != 'AdminLogin' ">
+  <div class="layout-wrapper" v-if="$route.name != 'AdminLogin'">
     <aside>
       <div class="avatar">
         <img src="@/assets/img/cow.jpg" alt="{{user.name}}" />
@@ -34,7 +34,11 @@
         </ul>
       </div>
       <div class="logout">
-        <img src="@/assets/img/icons/log-out.svg" alt="logout" @click="$store.dispatch('admin_logout')" />
+        <img
+          src="@/assets/img/icons/log-out.svg"
+          alt="logout"
+          @click="$store.dispatch('admin_logout')"
+        />
       </div>
     </aside>
   </div>
@@ -43,9 +47,8 @@
 
 <script>
 export default {
-  name: 'AdminLayout',
-  methods: {
-  },
+  name: "AdminLayout",
+  methods: {},
 };
 </script>
 
@@ -53,7 +56,6 @@ export default {
 $red: #fc573b;
 $yellow: #ffb848;
 $primary: #3ed749;
-
 
 .pending {
   color: $yellow !important;
@@ -79,7 +81,17 @@ $primary: #3ed749;
 .layout-wrapper + main {
   margin-left: 100px;
 }
-
+.error {
+  a {
+    display: block;
+    color: red;
+    text-decoration: none;
+    transition: 300ms;
+    &:hover {
+      transform: translateX(5px);
+    }
+  }
+}
 aside {
   width: 100px;
   height: 100vh;
@@ -116,7 +128,6 @@ aside {
       background: #eee;
       padding: 10px;
       border-radius: 5px;
-
     }
   }
   img {

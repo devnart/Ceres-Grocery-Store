@@ -82,7 +82,7 @@
     <router-view />
   </transition> -->
   <router-view v-slot="{ Component }">
-    <transition name="slide">
+    <transition name="slide" mode="out-in">
       <component :is="Component" />
     </transition>
   </router-view>
@@ -128,7 +128,6 @@ export default {
       e.preventDefault();
 
       if (this.$store.state.cart.length < 1) {
-        console.log(this.$store.state.cart.length);
         createToast("Cart is Empty!", {
           showIcon: "true",
           swipeClose: "true",
@@ -155,7 +154,7 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" >
 .slide-enter-active,
 .slide-leave-active {
   transition: all 0.5s ease;

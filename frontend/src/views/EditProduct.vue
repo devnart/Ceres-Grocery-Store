@@ -1,6 +1,10 @@
 <template>
   <main>
-    <div class="row">
+    <div class="container error" v-if="notFound">
+      <p>Product not found!</p>
+      <router-link to="/products">Back to list</router-link>
+    </div>
+    <div class="row" v-if="!notFound">
       <div class="column">
         <div class="container">
           <form @submit.prevent="editProduct()" ref="form">
@@ -95,6 +99,7 @@ import axios from "axios";
 export default {
   data() {
     return {
+      notFound: false,
       product: {},
     };
   },
@@ -105,8 +110,13 @@ export default {
       axios
         .get(`http://localhost/ceres/backend/productController/getSingle/${id}`)
         .then((response) => {
-          this.product = response.data;
-          this.checkCategory(this.product.category);
+          console.log(response);
+          if (response.data == false) {
+            this.notFound = true;
+          } else {
+            this.product = response.data;
+            this.checkCategory(this.product.category);
+          }
         })
         .catch((error) => {
           console.log(error);
@@ -157,7 +167,6 @@ export default {
     },
 
     checkCategory(category) {
-      console.log(category);
       if (category === "vegetables") {
         this.$refs.fruit.style.backgroundColor = "transparent";
 
@@ -177,6 +186,7 @@ export default {
 
 <style lang="scss" scoped>
 $primary: #3ed749;
+
 form {
   width: 550px;
   display: flex;

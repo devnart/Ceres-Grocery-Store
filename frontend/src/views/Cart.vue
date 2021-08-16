@@ -114,6 +114,7 @@ import Submit from "@/components/Submit.vue";
 import Popper from "vue3-popper";
 
 import axios from "axios";
+import UserLayout from "../layouts/UserLayout.vue";
 
 export default {
   inject: ["mq"],
@@ -142,7 +143,6 @@ export default {
       this.products.forEach((element) => {
         this.finalProducts += `${element.name}(${element.qty}) `;
       });
-      console.log(this.finalProducts);
     },
 
     // Posting order details to database
@@ -197,6 +197,7 @@ export default {
   created() {
     this.$store.dispatch("checkJWT");
     this.finalCart();
+    console.log(this.$store.state.layout);
   },
 };
 </script>

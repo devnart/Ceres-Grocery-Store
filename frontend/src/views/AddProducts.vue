@@ -150,12 +150,6 @@ export default {
 
     addProduct() {
       var formData = new FormData(this.$refs.form);
-      for (var value of formData.values()) {
-        console.log(value);
-      }
-      for (var key of formData.keys()) {
-        console.log(key);
-      }
       const config = {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("admin_token")}`,
@@ -170,8 +164,6 @@ export default {
           config
         )
         .then((response) => {
-          console.log(response);
-
           if (response.data == true) {
             createToast("Product added successfully", {
               showIcon: true,

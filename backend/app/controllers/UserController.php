@@ -61,7 +61,7 @@ class UserController extends Controller
         if ($user) {
             print_r(json_encode($user));
         } else {
-            print_r(json_encode("User not found"));
+            print_r(json_encode(false));
         }
     }
 

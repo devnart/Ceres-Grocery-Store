@@ -1,6 +1,10 @@
 <template>
-  <div class="main">
-    <div class="container">
+  <main class="main">
+    <div class="container error" v-if="notFound">
+      <p>User not found!</p>
+      <router-link to="/users">Back to list</router-link>
+    </div>
+    <div class="container" v-if="!notFound">
       <header>
         <div class="col">
           <div class="avatar">
@@ -73,7 +77,7 @@
         </div>
       </section>
     </div>
-  </div>
+  </main>
 </template>
 
 <script>
@@ -87,6 +91,7 @@ export default {
   },
   data() {
     return {
+      notFound: false,
       orders: [],
       user: [],
     };
@@ -98,7 +103,11 @@ export default {
       axios
         .post("http://localhost/ceres/backend/UserController/getUser", { id })
         .then((response) => {
-          this.user = response.data;
+          if (response.data == false) {
+            this.notFound = true;
+          } else {
+            this.user = response.data;
+          }
         })
         .catch((error) => {
           console.log(error);

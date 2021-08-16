@@ -32,7 +32,6 @@ const routes = [
     },
     beforeEnter: (to, from, next) => {
       if (store.state.products.length === 0) {
-        console.log("Loading products...");
         store.dispatch("getProducts").then(next);
       } else {
         next();
@@ -214,11 +213,9 @@ router.beforeEach((to, from, next) => {
     store.commit("SET_LAYOUT", "admin-layout");
 
     next();
-  } else if (to.meta.template == "user") {
+  } else {
     store.commit("SET_LAYOUT", "user-layout");
 
-    next();
-  } else {
     next();
   }
 

@@ -1,6 +1,10 @@
 <template>
   <main>
-    <div class="container">
+    <div class="container error" v-if="notFound">
+      <p>Order not found!</p>
+      <router-link to="/orders">Back to list</router-link>
+    </div>
+    <div class="container" v-if="!notFound">
       <div class="order-title">
         <h1>Order Deatils</h1>
         <div>
@@ -85,6 +89,7 @@ export default {
   data() {
     return {
       order: [],
+      notFound: false,
     };
   },
   methods: {
@@ -95,7 +100,11 @@ export default {
           `http://localhost/ceres/backend/orderController/getOrderById/${this.$route.params.id}`
         )
         .then((response) => {
-          this.order = response.data;
+          if (response.data == false) {
+            this.notFound = true;
+          } else {
+            this.order = response.data;
+          }
         })
         .catch((error) => {
           console.log(error);

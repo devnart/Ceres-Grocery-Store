@@ -71,7 +71,6 @@ export default {
       );
 
       const jwt = await resp.json();
-      console.log(jwt);
       if (jwt.Admin) {
         this.token = jwt.Token;
         this.admin_id = jwt.Admin.id;

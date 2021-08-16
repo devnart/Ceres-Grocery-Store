@@ -59,10 +59,8 @@ export default createStore({
     },
 
     SET_AUTH(state, status) {
-      console.log(status);
       state.isAuth = status;
       localStorage.setItem("isAuth", status);
-      console.log(state.isAuth);
     },
     SET_USER(state, user) {
       state.user = user;
