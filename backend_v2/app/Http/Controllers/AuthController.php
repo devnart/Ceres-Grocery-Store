@@ -50,7 +50,7 @@ class AuthController extends Controller
         return response([
             'user' => $user,
             'token' => $token],
-            Response::HTTP_CREATED
+            Response::HTTP_OK
         );
     }
 
